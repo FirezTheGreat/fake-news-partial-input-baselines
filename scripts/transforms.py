@@ -147,8 +147,11 @@ def fully_stripped_texts(df):
 
 # ---------- probes on stripped text (function words + named entities, one spaCy pass) ----------
 
-def stripped_profile(texts):
-    """For each (already stripped) text: its function-word string and its entity-label counts."""
+def stripped_profile(texts, cache_name="stripped_profile"):
+    """For each (already stripped) text: its function-word string and its entity-label counts.
+
+    cache_name must differ per dataset (ISOT uses the default) so caches don't overwrite each other.
+    """
     def compute(texts):
         docs = _spacy_pipe(texts, ["parser", "lemmatizer"], "stripped-text profile")
         out = []
@@ -158,7 +161,7 @@ def stripped_profile(texts):
                 counts[ent.label_] = counts.get(ent.label_, 0) + 1
             out.append({"fw": _function_word_string(doc), "ents": counts})
         return out
-    return _cached("stripped_profile", texts, compute)
+    return _cached(cache_name, texts, compute)
 
 
 def entity_features(profile, texts):

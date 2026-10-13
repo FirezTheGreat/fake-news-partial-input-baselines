@@ -1,0 +1,22 @@
+{
+  "name": "e4b_mcintire_function_words",
+  "input": "text",
+  "model": "LogisticRegression",
+  "n_train": 38644,
+  "n_test": 6059,
+  "majority_baseline": 0.506684271331903,
+  "accuracy": 0.63871926060406,
+  "precision": 0.6232167832167832,
+  "recall": 0.7257328990228012,
+  "f1": 0.6705793829947329,
+  "confusion_matrix": [
+    [
+      1642,
+      1347
+    ],
+    [
+      842,
+      2228
+    ]
+  ]
+}

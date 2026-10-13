@@ -1,0 +1,22 @@
+{
+  "name": "e4b_reverse",
+  "input": "text",
+  "model": "LogisticRegression",
+  "n_train": 6059,
+  "n_test": 38644,
+  "majority_baseline": 0.5483645585343132,
+  "accuracy": 0.6502691232791636,
+  "precision": 0.5941744786684523,
+  "recall": 0.7117973987280124,
+  "f1": 0.6476890592007508,
+  "confusion_matrix": [
+    [
+      12706,
+      8485
+    ],
+    [
+      5030,
+      12423
+    ]
+  ]
+}

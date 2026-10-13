@@ -120,6 +120,12 @@ fake**; majority-class chance on the test split = 54.8%. All duplicates were
 within one label; none crossed classes. LIAR files verified: 10,269 / 1,284 /
 1,283 rows = 12,836, 14 columns, no header.
 
+**McIntire "fake or real news"** (added 2026-10-13) — 6,335 full articles; real from mainstream
+outlets (NYT, NPR …; "(Reuters)" in only 0.3%), fake from flagged sites. No body overlap with ISOT.
+Download: github.com/joolsa/fake_real_news_dataset → `fake_or_real_news.csv.zip` (the Kaggle
+competition link did not work). Extract the CSV to `data/mcintire/`. Cleaned like ISOT → 6,059
+(2,989 real / 3,070 fake). Its giveaways run the *opposite* way to ISOT's (fake has more curly quotes).
+
 **Known limitation to state openly:** LIAR has no article bodies, only short
 statements, so E4 is a headline-level comparison. Some transfer failure may be
 domain shift rather than artifact reliance.
@@ -203,6 +209,12 @@ All new probes run on **fully stripped text** (E3 + E3b rules), so they can't us
   Before/after: E5c 98.0 → 90.3%, E3c 93.4 → 90.7%. Old numbers kept in `results/before_quote_fix/`.
   Report this openly (report section 6.6).
 
+### E4b — full-article cross-corpus (added 2026-10-13, closes the headline-only limitation)
+In `04_cross_corpus.py`. McIntire in-domain control 91.9% (learnable). **ISOT → McIntire full text
+61.2%** (chance 50.7%) — labels 68% of McIntire's real (mainstream, non-Reuters) articles as fake.
+Stripped 59.8%, stripped function words 63.9%. Reverse McIntire → ISOT 65.0% (chance 54.8%).
+Honest caveat: ~10 points above chance transfers. Figure 7 shows within vs across for both corpora.
+
 ### Robustness (added)
 Every split-based experiment is refit on 5 stratified random splits (seeds
 42–46); results carry `accuracy_mean` / `accuracy_sd`. Headline numbers and
@@ -230,6 +242,11 @@ confusion matrices are from the fixed seed-42 split, shared by all experiments.
 | E4 control  ISOT headlines | Headline only, same dataset | 94.6% | 94.7% ± 0.4% | 0.939 | 54.8% |
 | E4  ISOT → LIAR | Headline-trained, tested on LIAR | 45.5% | n/a (fixed test set) | 0.549 | 55.8% |
 | E4  ISOT → LIAR, no half-true | LIAR without the ambiguous label | 51.1% | n/a (fixed test set) | 0.631 | 55.6% |
+| E4b control  McIntire in-domain | McIntire full text, its own split | 91.9% | 91.2% ± 0.5% | 0.921 | 50.7% |
+| E4b  ISOT → McIntire, full text | Full articles, other dataset | 61.2% | n/a (fixed test set) | 0.700 | 50.7% |
+| E4b  ISOT → McIntire, stripped | Both sides E3b-stripped | 59.8% | n/a (fixed test set) | 0.687 | 50.7% |
+| E4b  ISOT → McIntire, function words | Stripped function words | 63.9% | n/a (fixed test set) | 0.671 | 50.7% |
+| E4b  McIntire → ISOT, full text | Reverse direction | 65.0% | n/a (fixed test set) | 0.648 | 54.8% |
 | E5a  US politics only: full text | Topic-matched subset | 98.3% | 98.5% ± 0.1% | 0.986 | 60.9% |
 | E5b  US politics only: stripped | Topic-matched, E3b text | 96.7% | 97.0% ± 0.2% | 0.973 | 60.9% |
 | E5c  US politics only: stripped function words | Topic-matched, no markers, no content words | 90.3% | 90.5% ± 0.2% | 0.920 | 60.9% |
@@ -340,7 +357,8 @@ came from.
 **The numbers to memorise:** baseline 98.4% (E1); function words only 96.8%
 (E2b) — the headline; source markers stripped from both sides still 97.3%
 (E3b); US politics only + stripped + function words 90.3% vs 60.9% chance (E5c);
-cross-corpus 45.5% on LIAR, below its 55.8% chance (E4). Chance on ISOT is 54.8%. The gap between the first and the last *is* the project.
+cross-corpus 45.5% on LIAR, below its 55.8% chance (E4); full articles from other outlets
+61.2% vs 50.7% chance (E4b). Chance on ISOT is 54.8%. The gap between the first and the last *is* the project.
 
 **Anticipated questions and answers:**
 
@@ -372,6 +390,9 @@ cross-corpus 45.5% on LIAR, below its 55.8% chance (E4). Chance on ISOT is 54.8%
   (chance 60.9%).
 - *"Is this just because you used logistic regression?"* → No. A linear SVM gets slightly higher accuracy
   on every condition. A stronger model exploits the shortcut more, not less.
+- *"LIAR is only headlines — what about full articles?"* → We tested a second dataset of full
+  articles from NYT, NPR and others. The detector drops from 98% to 61%, and calls two-thirds of the
+  genuine articles fake.
 - *"Why is LIAR below chance?"* → The model learned "not written like Reuters =
   fake". LIAR statements aren't written like Reuters, so it calls most of them
   fake.
@@ -502,13 +523,16 @@ mean no leakage; well above means leakage.
 - E4 below chance: the model calls 77% of LIAR statements fake ("not Reuters-style = fake").
 - All 5-split SDs ≤ 0.5 points.
 
-**Done:** pipeline E1–E5 + SVM check + robustness (7 steps, `.\run`); 6 figures; results table;
-architecture diagram; citations verified (incl. Verma DOI, page confirmed real); Word report
-(`report/WSMA_Report.docx`, 20 pages, yellow placeholders; `report/build_report.py` regenerates it and
-OVERWRITES Word edits). Framing agreed: "we built a detector, got 98%, proved the 98% is fake".
-Lab topics now covered: tokenisation, cleaning, POS (E2b/E3c/E5c), NER (E2e), sentiment (E2d), TF-IDF.
-Not done by decision: stemming/lemmatisation.
+**Done:** pipeline E1–E5 + E4b (McIntire) + SVM check + robustness (7 steps, `.\run`);
+7 figures; results table; architecture diagram; citations verified (incl. Verma DOI, page confirmed
+real; McIntire dataset cited); Word report (`report/WSMA_Report.docx`, 21 pages, yellow placeholders;
+`report/build_report.py` regenerates it and OVERWRITES Word edits). Framing agreed: "we built a detector,
+got 98%, proved the 98% is fake". Lab topics covered: tokenisation, cleaning, POS (E2b/E3c/E5c),
+NER (E2e), sentiment (E2d), TF-IDF. Not done by decision: stemming/lemmatisation, transformer check.
 
-**Remaining:** fill report placeholders and export PDF; optionally a full-article second corpus (closes the
-headline-level E4 limitation) and/or a transformer check (RTX 3070 available); read/reword the report;
-viva walkthrough of scripts 02–07; presenter handoff (section 12 is current).
+All threats that could be tested have been: topic (E5), classifier (SVM), LIAR mapping, headline-only
+transfer (E4b). Remaining stated limitations: probes run in depth on ISOT only; classical models only;
+hand-written stripping rules (extended once, disclosed).
+
+**Remaining:** fill report placeholders and export PDF; read/reword the report; viva walkthrough of
+scripts 02–07; presenter handoff (section 12 is current).

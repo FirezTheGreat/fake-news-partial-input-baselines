@@ -13,3 +13,5 @@ results/*.txt
 
 # Word lock files
 report/~$*
+# McIntire corpus (download: github.com/joolsa/fake_real_news_dataset)
+data/mcintire/

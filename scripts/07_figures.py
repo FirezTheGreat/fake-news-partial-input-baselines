@@ -6,6 +6,7 @@ figures/fig3_confusion.png     E1 vs E3 vs E3b confusion matrices
 figures/fig4_degradation.png   accuracy as information is removed
 figures/fig5_topic_matched.png E5: the strictest probes on US-politics-only data
 figures/fig6_svm_check.png     logistic regression vs linear SVM on the same inputs
+figures/fig7_cross_corpus.png  within-dataset vs other-dataset accuracy (LIAR, McIntire)
 results/results_table.md       the results table for the report
 """
 
@@ -50,6 +51,11 @@ CONDITIONS = [  # (results file, label for figures and table, what the model see
 ]
 TABLE_ONLY = [  # extra rows for the results table (different test sets or chance levels)
     ("e4_liar_no_halftrue", "E4  ISOT → LIAR, no half-true", "LIAR without the ambiguous label"),
+    ("e4b_mcintire_control", "E4b control  McIntire in-domain", "McIntire full text, its own split"),
+    ("e4b_mcintire_full", "E4b  ISOT → McIntire, full text", "Full articles, other dataset"),
+    ("e4b_mcintire_stripped", "E4b  ISOT → McIntire, stripped", "Both sides E3b-stripped"),
+    ("e4b_mcintire_function_words", "E4b  ISOT → McIntire, function words", "Stripped function words"),
+    ("e4b_reverse", "E4b  McIntire → ISOT, full text", "Reverse direction"),
     ("e5a_topic_full", "E5a  US politics only: full text", "Topic-matched subset"),
     ("e5b_topic_stripped", "E5b  US politics only: stripped", "Topic-matched, E3b text"),
     ("e5c_topic_function_words", "E5c  US politics only: stripped function words",
@@ -268,6 +274,42 @@ def fig6_svm_check(results):
     plt.close(fig)
 
 
+def fig7_cross_corpus(results):
+    groups = [  # (label, within-dataset result, across-dataset result)
+        ("ISOT headlines → LIAR", "e4_isot_titles", "e4_liar_transfer"),
+        ("ISOT articles → McIntire", "e1_baseline", "e4b_mcintire_full"),
+        ("McIntire articles → ISOT", "e4b_mcintire_control", "e4b_reverse"),
+    ]
+    groups = [(label, results[a], results[b]) for label, a, b in groups if results.get(a) and results.get(b)]
+    if not groups:
+        return
+    groups = groups[::-1]
+    y = np.arange(len(groups))
+    h = 0.32
+
+    fig, ax = plt.subplots(figsize=(8, 0.95 * len(groups) + 1.6))
+    ax.barh(y + h / 2 + 0.02, [g[1]["accuracy"] for g in groups], height=h, color=BLUE, zorder=2,
+            label="Tested on the same dataset")
+    ax.barh(y - h / 2 - 0.02, [g[2]["accuracy"] for g in groups], height=h, color=ORANGE, zorder=2,
+            label="Tested on the other dataset")
+    for yi, (_, within, across) in zip(y, groups):
+        for off, r in ((h / 2 + 0.02, within), (-h / 2 - 0.02, across)):
+            ax.text(r["accuracy"] + 0.01, yi + off, f"{r['accuracy']:.1%}", va="center", fontsize=8.5, color=INK)
+        chance = across["majority_baseline"]
+        ax.plot([chance, chance], [yi - h - 0.08, yi + 0.02], color=INK_2, linestyle=(0, (3, 2)),
+                linewidth=1, zorder=3)
+    ax.set_yticks(y, [g[0] for g in groups])
+    ax.set_xlim(0, 1.08)
+    ax.xaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
+    ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
+    ax.tick_params(axis="y", length=0)
+    ax.legend(loc="upper left", bbox_to_anchor=(0, -0.12), ncol=2, frameon=False, fontsize=9)
+    title(ax, "Accuracy collapses on a different dataset",
+          "Dashed tick = chance (majority class) on the dataset tested")
+    fig.savefig(FIGURES_DIR / "fig7_cross_corpus.png")
+    plt.close(fig)
+
+
 def results_table(results):
     lines = ["| Condition | What the model sees | Accuracy | Mean ± SD, 5 splits | F1 (fake) | Chance |",
              "|---|---|---|---|---|---|"]
@@ -303,6 +345,7 @@ def main():
     fig4_degradation(results)
     fig5_topic_matched(results)
     fig6_svm_check(results)
+    fig7_cross_corpus(results)
     results_table(results)
     print(f"figures written to {FIGURES_DIR}")
 

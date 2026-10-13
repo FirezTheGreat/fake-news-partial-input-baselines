@@ -12,6 +12,11 @@
 | E4 control  ISOT headlines | Headline only, same dataset | 94.6% | 94.7% ± 0.4% | 0.939 | 54.8% |
 | E4  ISOT → LIAR | Headline-trained, tested on LIAR | 45.5% | n/a (fixed test set) | 0.549 | 55.8% |
 | E4  ISOT → LIAR, no half-true | LIAR without the ambiguous label | 51.1% | n/a (fixed test set) | 0.631 | 55.6% |
+| E4b control  McIntire in-domain | McIntire full text, its own split | 91.9% | 91.2% ± 0.5% | 0.921 | 50.7% |
+| E4b  ISOT → McIntire, full text | Full articles, other dataset | 61.2% | n/a (fixed test set) | 0.700 | 50.7% |
+| E4b  ISOT → McIntire, stripped | Both sides E3b-stripped | 59.8% | n/a (fixed test set) | 0.687 | 50.7% |
+| E4b  ISOT → McIntire, function words | Stripped function words | 63.9% | n/a (fixed test set) | 0.671 | 50.7% |
+| E4b  McIntire → ISOT, full text | Reverse direction | 65.0% | n/a (fixed test set) | 0.648 | 54.8% |
 | E5a  US politics only: full text | Topic-matched subset | 98.3% | 98.5% ± 0.1% | 0.986 | 60.9% |
 | E5b  US politics only: stripped | Topic-matched, E3b text | 96.7% | 97.0% ± 0.2% | 0.973 | 60.9% |
 | E5c  US politics only: stripped function words | Topic-matched, no markers, no content words | 90.3% | 90.5% ± 0.2% | 0.920 | 60.9% |

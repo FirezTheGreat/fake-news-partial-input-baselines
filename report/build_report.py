@@ -34,7 +34,8 @@ R = {n: load(n) for n in ["e1_baseline", "e2a_first_sentence", "e2b_function_wor
                           "e4_liar_transfer", "e4_liar_no_halftrue", "e2d_sentiment", "e2e_entities",
                           "e3c_stripped_function_words", "e5a_topic_full", "e5b_topic_stripped",
                           "e5c_topic_function_words", "e5d_topic_metadata", "e1_svm", "e2a_svm", "e2b_svm",
-                          "e3b_svm"]}
+                          "e3b_svm", "e4b_mcintire_control", "e4b_mcintire_full", "e4b_mcintire_stripped",
+                          "e4b_mcintire_function_words", "e4b_reverse"]}
 BEFORE_FIX = {n: json.load(open(RESULTS / "before_quote_fix" / f"{n}.json", encoding="utf-8"))
               for n in ["e3c_stripped_function_words", "e5c_topic_function_words"]}
 
@@ -251,7 +252,9 @@ p(f"Fake news classifiers trained on the ISOT benchmark routinely report accurac
   f"{acc('e5c_topic_function_words')} against a chance level of {TOPIC_CHANCE}, and a linear SVM reproduces "
   f"every result. Finally, a headline model "
   f"that scores {acc('e4_isot_titles')} within ISOT falls to {acc('e4_liar_transfer')} on the LIAR "
-  f"fact-checking corpus, below that corpus's majority-class rate of {LIAR_CHANCE}. We conclude that high "
+  f"fact-checking corpus, below that corpus's majority-class rate of {LIAR_CHANCE}, and the full-text "
+  f"detector falls from {acc('e1_baseline')} to {acc('e4b_mcintire_full')} on a second corpus of full "
+  f"articles whose real news does not come from Reuters. We conclude that high "
   f"accuracy on ISOT reflects source and genre separability rather than any ability to detect false content.")
 p("**Keywords:** fake news, dataset artifacts, shortcut learning, partial-input baselines, ISOT, LIAR, TF-IDF")
 
@@ -284,8 +287,8 @@ bullet("a cleaned version of ISOT with empty and duplicate articles removed, and
 bullet("five content-free partial-input probes (first sentence, function words, eight surface statistics, "
        "sentiment scores and named-entity counts) applied to the same fixed train/test split;")
 bullet("artifact-removal experiments that strip source markers from Reuters only, and then from both classes;")
-bullet("a cross-corpus test on LIAR, with an in-domain control that separates the effect of crossing datasets "
-       "from the effect of using headlines only, and a check of the label mapping;")
+bullet("cross-corpus tests on LIAR (headlines) and on a second corpus of full articles, each with an "
+       "in-domain control that separates the effect of crossing datasets from other differences;")
 bullet("confound checks showing that the results are not explained by topic (a US-politics-only subset) or "
        "by the choice of classifier (a linear SVM);")
 bullet("an inspection of model coefficients that identifies specific leakage tokens, including three "
@@ -307,7 +310,8 @@ p("Shu et al. (2017) survey fake news detection on social media from a data mini
   "introduced LIAR, about 12,800 short political statements labelled on a six-point truthfulness scale by "
   "PolitiFact editors. Because LIAR labels individual claims by fact-checking rather than by publisher, "
   "it provides a useful external test of whether a model trained on ISOT has learned anything about "
-  "truthfulness.")
+  "truthfulness. McIntire's (2017) fake-or-real news corpus pairs fake articles from flagged websites with "
+  "real articles from a range of mainstream outlets, which makes it a natural full-article counterpart.")
 h("2.2 Dataset artifacts and partial-input baselines", 2)
 p("Gururangan et al. (2018) showed that natural language inference (NLI) datasets contain annotation "
   "artifacts: a classifier that sees only the hypothesis, never the premise it should be compared against, "
@@ -405,6 +409,11 @@ p("The ISOT dataset contains 44,898 articles: 21,417 labelled real and 23,481 la
   "21,191 real and 17,453 fake**. The subject field was never used as model input, because its values do "
   "not overlap between the classes and would give away the label directly. It was used only to select rows "
   "for the topic-matched check (E5).")
+p("The McIntire corpus contains 6,335 full news articles labelled real or fake. Its fake articles come "
+  "from websites flagged as unreliable, and its real articles from mainstream outlets such as the New York "
+  "Times and NPR; the Reuters dateline appears in only 0.3% of its real articles. It shares no article "
+  "body with ISOT. It was cleaned in the same way as ISOT (36 empty and 240 duplicate bodies removed), "
+  "leaving **6,059 articles: 2,989 real and 3,070 fake**.")
 p("LIAR contains 12,836 statements (10,269 train, 1,284 validation, 1,283 test). Its six labels were "
   "collapsed to two: *true*, *mostly-true* and *half-true* were treated as real, and *barely-true*, "
   "*false* and *pants-fire* as fake. Placing *half-true* on the real side is a judgement call and is "
@@ -467,6 +476,10 @@ p("**E4 — Cross-corpus transfer.** Because LIAR has no article bodies, this ex
   "model is trained on all ISOT titles and tested on all 12,836 LIAR statements. As an in-domain control, "
   "the same headline-only model is also evaluated on the standard ISOT split. The control shows how much "
   "accuracy headlines support within ISOT, so that any drop on LIAR can be attributed to crossing datasets.")
+p("**E4b — Cross-corpus transfer, full articles.** The full-text detector is trained on all of ISOT and "
+  "tested on all of McIntire, using full text, fully stripped text (E3 and E3b rules on both corpora) and "
+  "stripped function words. As a control, McIntire is also evaluated on its own 80/20 split, and the "
+  "transfer is repeated in the reverse direction (trained on McIntire, tested on ISOT).")
 p("**E5 — Topic-matched check.** Real ISOT articles are 53% US politics and 47% world news, while the fake "
   "articles are all US politics and US news, so topic alone could separate part of the data. E5 keeps only "
   "the real US-politics articles and all fake articles (28,666 in total), and repeats the strictest "
@@ -496,6 +509,11 @@ names = [("e1_baseline", "E1  Full text"), ("e2a_first_sentence", "E2a  First se
          ("e3c_stripped_function_words", "E3c  Stripped, function words"),
          ("e4_isot_titles", "E4 control  ISOT headlines"), ("e4_liar_transfer", "E4  ISOT → LIAR"),
          ("e4_liar_no_halftrue", "E4  ISOT → LIAR, no half-true"),
+         ("e4b_mcintire_control", "E4b control  McIntire in-domain"),
+         ("e4b_mcintire_full", "E4b  ISOT → McIntire, full text"),
+         ("e4b_mcintire_stripped", "E4b  ISOT → McIntire, stripped"),
+         ("e4b_mcintire_function_words", "E4b  ISOT → McIntire, function words"),
+         ("e4b_reverse", "E4b  McIntire → ISOT"),
          ("e5a_topic_full", "E5a  US politics: full text"), ("e5b_topic_stripped", "E5b  US politics: stripped"),
          ("e5c_topic_function_words", "E5c  US politics: stripped function words"),
          ("e5d_topic_metadata", "E5d  US politics: stripped metadata")]
@@ -606,16 +624,31 @@ p(f"Within ISOT, a model trained on headlines alone reaches {acc('e4_isot_titles
   f"politicians, are not written like wire copy, so most are labelled fake regardless of whether they are "
   f"true. Removing the *half-true* statements, the one ambiguous label, gives {acc('e4_liar_no_halftrue')} "
   f"against a chance level of {pct(R['e4_liar_no_halftrue']['majority_baseline'])}, so the result does not "
-  f"depend on the label mapping. The answer to RQ3 is that nothing the model learns on ISOT transfers to "
-  f"independently fact-checked claims.")
+  f"depend on the label mapping.")
+mc = R["e4b_mcintire_full"]["confusion_matrix"]
+p(f"**Full articles.** Because LIAR contains only short statements, the test was repeated on the McIntire "
+  f"corpus of full articles. McIntire itself is learnable: trained and tested on its own split, the same "
+  f"pipeline reaches {acc('e4b_mcintire_control')}. The ISOT detector, however, reaches only "
+  f"{acc('e4b_mcintire_full')} on it against a chance level of "
+  f"{pct(R['e4b_mcintire_full']['majority_baseline'])}. It labels {pct(mc[0][1] / sum(mc[0]), 0)} of "
+  f"McIntire's real articles — mainstream journalism that is not written in Reuters house style — as fake. "
+  f"Stripping both corpora does not help ({acc('e4b_mcintire_stripped')}), and stripped function words give "
+  f"{acc('e4b_mcintire_function_words')}. The reverse direction fails in the same way: trained on McIntire, "
+  f"the model reaches {acc('e4b_reverse')} on ISOT against a chance level of "
+  f"{pct(R['e4b_reverse']['majority_baseline'])}. Some signal does transfer, about ten points above chance, "
+  f"but almost all of the within-corpus accuracy is lost (Figure 5).")
+figure(FIGURES / "fig7_cross_corpus.png", "Figure 5. Accuracy within each dataset and on the other dataset. "
+                                          "Dashed ticks mark chance on the dataset tested.", width=Cm(15))
+p("The answer to RQ3 is that what the detector learns on ISOT does not transfer, neither to independently "
+  "fact-checked claims nor to full articles from other publishers.")
 
 h("6.6 Is it style, topic or the classifier? (RQ4)", 2)
-p(f"**Topic.** Figure 5 repeats the strictest conditions on US politics only. Full text gives "
+p(f"**Topic.** Figure 6 repeats the strictest conditions on US politics only. Full text gives "
   f"{acc('e5a_topic_full')}, fully stripped text {acc('e5b_topic_stripped')}, stripped function words "
   f"{acc('e5c_topic_function_words')} and eight stripped surface statistics {acc('e5d_topic_metadata')}, "
   f"against a chance level of {TOPIC_CHANCE}. Removing the world-news articles changes almost nothing, so "
   f"topic does not explain the results.")
-figure(FIGURES / "fig5_topic_matched.png", "Figure 5. The strictest probes on the US-politics-only subset. The "
+figure(FIGURES / "fig5_topic_matched.png", "Figure 6. The strictest probes on the US-politics-only subset. The "
                                            "dashed line is the majority-class rate on this subset.")
 p(f"**A scraping artifact found on the way.** Before the straight-quote rule was added to E3b, E5c reached "
   f"{pct(BEFORE_FIX['e5c_topic_function_words']['accuracy'])}, and its strongest fake feature was a bare "
@@ -624,29 +657,30 @@ p(f"**A scraping artifact found on the way.** Before the straight-quote rule was
   f"{pct(BEFORE_FIX['e3c_stripped_function_words']['accuracy'])} to {acc('e3c_stripped_function_words')}. "
   f"About eight points of the style probes' accuracy were therefore an encoding artifact; the remaining "
   f"accuracy is carried by genuine stylistic features.")
-p(f"**Classifier.** Figure 6 repeats four conditions with a linear SVM. The SVM is slightly *more* accurate "
+p(f"**Classifier.** Figure 7 repeats four conditions with a linear SVM. The SVM is slightly *more* accurate "
   f"in every case: {acc('e1_svm')} on full text, {acc('e2a_svm')} on the first sentence, {acc('e2b_svm')} on "
   f"function words and {acc('e3b_svm')} on stripped text. A stronger classifier exploits the same signal "
   f"more effectively; it does not make the problem go away.")
-figure(FIGURES / "fig6_svm_check.png", "Figure 6. Accuracy with logistic regression and a linear SVM on the same "
+figure(FIGURES / "fig6_svm_check.png", "Figure 7. Accuracy with logistic regression and a linear SVM on the same "
                                        "inputs.", width=Cm(14))
 p("The answer to RQ4 is that the signal is writing style. It survives the removal of topic differences, "
   "all identified markers and all content words, and it does not depend on the classifier.")
 
 h("6.7 Accuracy as information is removed", 2)
-p("Figure 7 orders the conditions by how much information they leave the model. Removing the title "
+p("Figure 8 orders the conditions by how much information they leave the model. Removing the title "
   "changes nothing, and removing every content word costs under two points. Only when the text is reduced "
   "to eight numbers does accuracy fall substantially, and even then it remains more than 30 points above "
   "chance.")
-figure(FIGURES / "fig4_degradation.png", "Figure 7. Accuracy as content is removed.", width=Cm(14))
+figure(FIGURES / "fig4_degradation.png", "Figure 8. Accuracy as content is removed.", width=Cm(14))
 
 h("6.8 Threats to validity", 2)
-p("Three threats were tested directly and ruled out: topic (E5), the choice of classifier (SVM check) and "
-  "the LIAR label mapping (transfer without *half-true*). The following remain.")
-bullet("**Headline-level transfer.** LIAR has no article bodies, so E4 compares headlines with short claims. "
-       "Part of the failure may be caused by this difference in text type rather than by artifacts; the "
-       "in-domain headline control limits, but does not remove, this concern.")
-bullet("**Single corpus.** Conclusions apply to ISOT. Other fake news datasets may be built differently.")
+p("Four threats were tested directly and ruled out: topic (E5), the choice of classifier (SVM check), the "
+  "LIAR label mapping (transfer without *half-true*) and the headline-only nature of LIAR (full-article "
+  "transfer to McIntire, E4b). The following remain.")
+bullet("**Corpus scope.** The probes were applied in depth to ISOT only; McIntire was used for transfer. "
+       "McIntire's labels, like ISOT's, are assigned by source rather than by fact-checking each article, "
+       "so it shows that the detector does not generalise across sources, not what it would score on "
+       "individually verified articles.")
 bullet("**Classical models only.** Transformer models were not tested. The SVM result suggests that stronger "
        "models exploit the same signal at least as effectively, but this was not measured for transformers.")
 bullet("**Hand-written removal rules.** E3b's rules cover the clutter found on inspection and were extended "
@@ -663,8 +697,9 @@ p(f"This project built a standard fake news detector on the ISOT benchmark and t
   f"surface statistics, against a chance level of {CHANCE}. Removing source markers from both classes "
   f"leaves {acc('e3b_furniture_stripped')}; restricting both classes to US politics and keeping only "
   f"function words still leaves {acc('e5c_topic_function_words')} against a chance level of "
-  f"{TOPIC_CHANCE}; and a model that scores {acc('e4_isot_titles')} on ISOT headlines scores below chance "
-  f"on LIAR.")
+  f"{TOPIC_CHANCE}; a model that scores {acc('e4_isot_titles')} on ISOT headlines scores below chance "
+  f"on LIAR; and the full-text detector falls to {acc('e4b_mcintire_full')} on a second corpus of full "
+  f"articles, labelling most genuine mainstream news as fake.")
 p("In short: we built a fake news detector, obtained 98% accuracy, and showed that the 98% does not "
   "measure fake news detection. The evidence points to one explanation. ISOT's labels coincide with two "
   "publishing pipelines, and "
@@ -717,6 +752,8 @@ refs = [
     "McCoy, R. T., Pavlick, E., & Linzen, T. (2019). Right for the wrong reasons: Diagnosing syntactic heuristics "
     "in natural language inference. In *Proceedings of ACL 2019*, pp. 3428–3448. "
     "https://doi.org/10.18653/v1/P19-1334",
+    "McIntire, G. (2017). Fake or real news dataset [Data set]. GitHub. "
+    "https://github.com/joolsa/fake_real_news_dataset",
     "Niven, T., & Kao, H.-Y. (2019). Probing neural network comprehension of natural language arguments. In "
     "*Proceedings of ACL 2019*, pp. 4658–4664. https://doi.org/10.18653/v1/P19-1459",
     "Poliak, A., Naradowsky, J., Haldar, A., Rudinger, R., & Van Durme, B. (2018). Hypothesis only baselines in "
