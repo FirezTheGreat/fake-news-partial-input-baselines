@@ -640,7 +640,7 @@ refs = [
     "Shu, K., Sliva, A., Wang, S., Tang, J., & Liu, H. (2017). Fake news detection on social media: A data mining "
     "perspective. *ACM SIGKDD Explorations Newsletter, 19*(1), 22–36. https://doi.org/10.1145/3137597.3137600",
     "Verma, Y. (2026). What does 99% accuracy measure? A reproducible audit of shortcut learning in a widely used "
-    "fake news corpus. arXiv preprint arXiv:2609.25006.",
+    "fake news corpus. arXiv preprint arXiv:2609.25006. https://doi.org/10.48550/arXiv.2609.25006",
     "Wang, W. Y. (2017). \"Liar, liar pants on fire\": A new benchmark dataset for fake news detection. In "
     "*Proceedings of ACL 2017, Volume 2 (Short Papers)*, pp. 422–426. https://doi.org/10.18653/v1/P17-2067",
     "Zhou, X., Elfardy, H., Christodoulopoulos, C., Butler, T., & Bansal, M. (2021). Hidden biases in unreliable "

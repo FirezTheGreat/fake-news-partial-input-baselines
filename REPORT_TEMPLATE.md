@@ -49,9 +49,10 @@ partial-input baselines, benchmark evaluation
 - Analogy to make the point accessible: a cancer classifier trained on samples where
   all positives came from one hospital and all negatives from another achieves 99%
   — by learning the hospital, not the disease
-- Contribution statement: we apply an established artifact-auditing methodology,
-  previously untested on fake news corpora, to quantify how much reported
-  performance survives when the model is denied content
+- Contribution statement: we apply an established artifact-auditing methodology to
+  ISOT, independently confirming recent source-leakage findings (Zhou et al., 2021;
+  Verma, 2026) and extending them with content-free *style* probes that quantify how
+  much reported performance survives when the model is denied content
 
 ---
 
@@ -78,15 +79,26 @@ partial-input baselines, benchmark evaluation
 - Schuster et al. (2019) — claim-only baselines remain competitive on FEVER against
   evidence-aware models. Closest prior work to ours.
 
-**3.4 Mitigation approaches**
+**3.4 Artifacts in fake news datasets**
+- Zhou et al. (2021, EACL) — unreliable-news datasets let models memorise the
+  site→label mapping; accuracy drops >10 points on site-disjoint splits
+- Verma (2026, arXiv preprint) — audits the same ISOT/Kaggle corpus: subject field
+  alone gives F1 = 1.000; removing the newswire tag, metadata and duplicates only
+  moves F1 0.994 → 0.981; LIAR transfer does not beat the majority class
+
+**3.5 Mitigation approaches**
 - Kaushik et al. (2020) — counterfactually augmented data
 - Gardner et al. (2020) — contrast sets
 
-**3.5 Identified gap**
-Partial-input auditing has been applied to NLI, argument reasoning, reading
-comprehension and fact verification — but not to fake news corpora, despite these
-corpora exhibiting an obvious construction asymmetry (single-source real class vs.
-multi-source fake class). This work closes that gap.
+**3.6 Identified gap**
+Source leakage in fake news corpora is already established (Zhou et al., 2021), and
+for ISOT specifically, metadata fields and the newswire tag are known to give the
+labels away (Verma, 2026). Existing audits remove or isolate specific *fields* or
+*tags*. What has not been tested is whether the class signal survives when the model
+is denied content altogether and given only the *style* of the writing — function
+words, the opening line, or punctuation statistics — and whether stripping the
+markers of *both* publishing pipelines closes the gap. This work addresses that
+narrower gap and independently replicates the earlier findings.
 
 ---
 
@@ -98,15 +110,15 @@ publishing pipelines. The real class in ISOT originates entirely from Reuters
 newswire and carries consistent formatting conventions — datelines, agency
 attribution, standardised byline structure — absent from the fake class.
 
-This creates a plausible but untested hypothesis: that classifiers achieve high
-benchmark accuracy by learning publication provenance rather than linguistic markers
-of deception. If true, reported performance is not merely optimistic but
+Prior work has shown that classifiers on such corpora can learn publication
+provenance rather than linguistic markers of deception (Zhou et al., 2021; Verma,
+2026). If that is the whole story, reported performance is not merely optimistic but
 categorically misdirected, and models trained on these corpora should be expected to
 fail on any text outside the benchmark's construction.
 
-**The problem this work addresses:** no quantification exists of how much ISOT
-benchmark performance is attributable to construction artifacts versus genuine
-content signal.
+**The problem this work addresses:** how much of ISOT benchmark performance survives
+when the model is given only the *style* of an article and none of its content, and
+whether removing both pipelines' source markers closes the gap.
 
 ---
 
@@ -296,6 +308,11 @@ practice in fake news detection.
     Perspective.* ACM SIGKDD Explorations, 19(1).
 11. Wang, W. Y. (2017). *"Liar, Liar Pants on Fire": A New Benchmark Dataset for
     Fake News Detection.* ACL.
+12. Zhou, X., Elfardy, H., Christodoulopoulos, C., Butler, T., & Bansal, M. (2021).
+    *Hidden Biases in Unreliable News Detection Datasets.* EACL, 2482–2492.
+13. Verma, Y. (2026). *What Does 99% Accuracy Measure? A Reproducible Audit of
+    Shortcut Learning in a Widely Used Fake News Corpus.* arXiv:2609.25006.
+    https://doi.org/10.48550/arXiv.2609.25006
 
 *Verify every citation against the actual paper before submission — do not submit a
 reference you have not personally confirmed exists and says what you claim.*

@@ -388,9 +388,9 @@ venue, year, pages. All 11 originals were correct; details completed below.
     prior work on fake-news datasets**
 13. Verma, Y. (2026). What Does 99% Accuracy Measure? A Reproducible Audit of
     Shortcut Learning in a Widely Used Fake News Corpus. arXiv:2609.25006
-    (preprint, not peer-reviewed) — **new; same corpus.** Open the arXiv page
-    yourself before submitting and confirm the ID and date: the listing showed
-    a July 2026 submission date, which doesn't match the 2609 (Sept) ID.
+    (preprint, not peer-reviewed). doi:10.48550/arXiv.2609.25006 — **new; same
+    corpus.** Confirmed real 2026-10-13: v1 dated 26 Jul 2026, code at
+    github.com/vermayuvraj/fake-news-detection.
 
 ---
 
@@ -476,5 +476,5 @@ methods that were never run (lemmatisation, NER, VADER/TextBlob, SVM, bigrams/tr
 and '~50% chance' (measured: 54.8%).
 
 **Remaining:** fill report placeholders (names, roll numbers, course code, instructor,
-department/institution, date); confirm the Verma (2026) arXiv entry; read and edit the report in your
+department/institution, date); read and edit the report in your
 own words; viva walkthrough of scripts 02–05; presenter handoff (section 12 is current).
