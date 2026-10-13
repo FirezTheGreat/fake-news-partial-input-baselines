@@ -1,0 +1,31 @@
+{
+  "name": "e2c_metadata",
+  "input": "feature_matrix",
+  "model": "RandomForestClassifier",
+  "n_train": 30915,
+  "n_test": 7729,
+  "majority_baseline": 0.5483244921723379,
+  "accuracy": 0.8624660370034933,
+  "precision": 0.8733087330873309,
+  "recall": 0.8135204812374678,
+  "f1": 0.8423550348509565,
+  "confusion_matrix": [
+    [
+      3826,
+      412
+    ],
+    [
+      651,
+      2840
+    ]
+  ],
+  "accuracy_splits": [
+    0.8624660370034933,
+    0.8613015914089792,
+    0.8650536938801915,
+    0.8620778884719886,
+    0.8636304825980075
+  ],
+  "accuracy_mean": 0.862905938672532,
+  "accuracy_sd": 0.0014655141663494806
+}

@@ -1,0 +1,15 @@
+# Python environment and caches
+.venv/
+__pycache__/
+
+# Raw datasets (download from Kaggle / UCSB; see PROJECT_CONTEXT.md section 6)
+data/*.csv
+data/liar/
+# spaCy output, rebuilt automatically by step 2 (~25 min)
+data/cache/
+
+# Run logs
+results/*.txt
+
+# Word lock files
+report/~$*
