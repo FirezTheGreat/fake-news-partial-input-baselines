@@ -7,7 +7,7 @@ score up to 97%, and the detector drops to 45–61% on other datasets. Full writ
 
 ## Reproduce it
 
-Tested on Windows with Python 3.10. Needs about 1 GB of disk.
+Tested on Windows with Python 3.10, 16 cores and 32 GB RAM. Needs about 1.5 GB of disk.
 
 **1. Set up Python** (from the project folder):
 
@@ -17,25 +17,26 @@ python -m venv .venv
 .venv\Scripts\python -m spacy download en_core_web_sm
 ```
 
-**2. Get ISOT by hand.** It needs a free Kaggle account:
-[kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset).
-Unzip it and put `True.csv` and `Fake.csv` in `data/`. The other two datasets (LIAR and McIntire)
-download automatically in the next step.
-
-**3. Run everything:**
+**2. Run everything:**
 
 ```bash
-.\run                      # Windows (PowerShell); in cmd just: run
+.\run                         # Windows (PowerShell); in cmd just: run
 .venv/bin/python run_all.py   # macOS/Linux
 ```
 
-Step 0 downloads LIAR and McIntire and checks every data file against the checksum of the copy the
-published results came from. If anything is missing or different, it stops and says what to do.
+That's it. All three datasets and the saved spaCy/VADER output (`data/cache/`) are included in the
+repository, so nothing is downloaded and a full run takes **about 5 minutes** on a 16-core laptop.
+Step 0 checks every data file against the checksum of the copy the published results came from.
 
-**How long it takes:** about 1.5 hours the first time, because spaCy tags every article and VADER
-scores them. That work is saved to `data/cache/` (71 MB), and later runs take about 15 minutes.
-To skip the wait, copy someone's `data/cache/` folder into yours: each cache file records a hash of
-the text it was made from, so a cache that doesn't match your data is ignored and rebuilt.
+**If the data is ever missing** (for example, a copy made without `data/`): step 0 re-downloads LIAR
+and McIntire automatically; ISOT needs a free Kaggle account at
+[kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset)
+(put `True.csv` and `Fake.csv` in `data/`). Without `data/cache/`, the first run rebuilds it, which
+takes about 1.5 hours; later runs are back to about 5 minutes.
+
+**Why it's fast:** each experiment fits its five random splits in parallel, and steps 1–6, which
+don't depend on each other, run three at a time with their output in `results/logs/`. Running them
+one at a time (`.\run 1 2 3 4 5 6 7`) gives identical results, just slower.
 
 ## What each step does
 
@@ -80,7 +81,7 @@ page.
 ## Layout
 
 ```
-data/        datasets (not in git) and data/cache/ (spaCy/VADER output, not in git)
+data/        the three datasets and data/cache/ (saved spaCy/VADER output)
 scripts/     common.py (shared harness), transforms.py (input views), 00–07 (steps)
 results/     one JSON per experiment, top-coefficient lists, results_table.md
 figures/     the charts used in the report

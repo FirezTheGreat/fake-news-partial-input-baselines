@@ -287,8 +287,9 @@ WSMA/
 ├── figures/                the four charts (PNG, 200 dpi)
 └── report/                 the Word report draft
 ```
-Full pipeline: ~15 min once caches exist (5 splits per experiment). First run on a new
-machine adds ~1 h of spaCy/VADER work, cached to data/cache/ afterwards.
+Full pipeline: ~5 min (splits fitted in parallel; steps 1-6 three at a time; logs in
+results/logs/). Datasets and data/cache/ are committed, so a copy of the repo needs no downloads.
+Without the cache, the first run rebuilds it (~1.5 h).
 
 **Shared contract — everything goes through this one function:**
 

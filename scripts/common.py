@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from sklearn.base import clone
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -45,6 +46,18 @@ def load_isot():
     return df.reset_index(drop=True)
 
 
+def _fit_on_split(pipeline, features, labels, seed):
+    """Fit a fresh copy of the pipeline on one stratified 80/20 split.
+
+    Returns (fitted pipeline, training-set size, test labels, test predictions).
+    """
+    X_train, X_test, y_train, y_test = train_test_split(
+        features, labels, test_size=TEST_SIZE, stratify=labels, random_state=seed
+    )
+    fitted = clone(pipeline).fit(X_train, y_train)
+    return fitted, len(y_train), y_test, fitted.predict(X_test)
+
+
 def run_experiment(features, labels, name, model=None, tfidf_kwargs=None,
                    test_features=None, test_labels=None):
     """Split, fit, evaluate, save metrics to results/{name}.json.
@@ -62,22 +75,26 @@ def run_experiment(features, labels, name, model=None, tfidf_kwargs=None,
     labels = np.asarray(labels)
     is_matrix = getattr(features, "ndim", 1) == 2
 
-    if test_features is None:
-        X_train, X_test, y_train, y_test = train_test_split(
-            features, labels, test_size=TEST_SIZE, stratify=labels, random_state=RANDOM_STATE
-        )
-    else:
-        X_train, y_train = features, labels
-        X_test, y_test = test_features, np.asarray(test_labels)
-
     clf = model if model is not None else LogisticRegression(max_iter=1000)
     if is_matrix:
         pipeline = Pipeline([("scale", StandardScaler()), ("clf", clf)])
     else:
         pipeline = Pipeline([("tfidf", TfidfVectorizer(**(tfidf_kwargs or {}))), ("clf", clf)])
 
-    pipeline.fit(X_train, y_train)
-    y_pred = pipeline.predict(X_test)
+    if test_features is None:
+        # The fixed split (seed 42) gives the headline metrics and confusion matrix; N_SPLITS - 1
+        # further random stratified splits give accuracy as mean +/- SD. The fits are independent,
+        # so they run in parallel; results are identical to fitting them one after another.
+        seeds = range(RANDOM_STATE, RANDOM_STATE + N_SPLITS)
+        fits = Parallel(n_jobs=N_SPLITS)(
+            delayed(_fit_on_split)(pipeline, features, labels, seed) for seed in seeds
+        )
+        pipeline, n_train, y_test, y_pred = fits[0]
+    else:
+        # A fixed external test set (cross-corpus): train on everything, nothing to resplit.
+        fits = None
+        pipeline.fit(features, labels)
+        n_train, y_test, y_pred = len(labels), np.asarray(test_labels), pipeline.predict(test_features)
 
     precision, recall, f1, _ = precision_recall_fscore_support(
         y_test, y_pred, average="binary", pos_label=FAKE, zero_division=0
@@ -86,7 +103,7 @@ def run_experiment(features, labels, name, model=None, tfidf_kwargs=None,
         "name": name,
         "input": "feature_matrix" if is_matrix else "text",
         "model": type(clf).__name__,
-        "n_train": int(len(y_train)),
+        "n_train": int(n_train),
         "n_test": int(len(y_test)),
         "majority_baseline": float(np.bincount(y_test).max() / len(y_test)),
         "accuracy": float(accuracy_score(y_test, y_pred)),
@@ -97,17 +114,8 @@ def run_experiment(features, labels, name, model=None, tfidf_kwargs=None,
         "confusion_matrix": confusion_matrix(y_test, y_pred, labels=[REAL, FAKE]).tolist(),
     }
 
-    # Robustness: refit an identical, unfitted copy on N_SPLITS - 1 further random
-    # stratified splits, so every accuracy can be reported as mean +/- SD. The
-    # headline numbers and confusion matrix above stay those of the fixed split.
-    # (Not applicable to a fixed external test set, where there is nothing to resplit.)
-    if test_features is None:
-        accuracies = [metrics["accuracy"]]
-        for seed in range(RANDOM_STATE + 1, RANDOM_STATE + N_SPLITS):
-            X_tr, X_te, y_tr, y_te = train_test_split(
-                features, labels, test_size=TEST_SIZE, stratify=labels, random_state=seed
-            )
-            accuracies.append(float(accuracy_score(y_te, clone(pipeline).fit(X_tr, y_tr).predict(X_te))))
+    if fits is not None:
+        accuracies = [float(accuracy_score(y_te, y_pr)) for _, _, y_te, y_pr in fits]
         metrics["accuracy_splits"] = accuracies
         metrics["accuracy_mean"] = float(np.mean(accuracies))
         metrics["accuracy_sd"] = float(np.std(accuracies, ddof=1))

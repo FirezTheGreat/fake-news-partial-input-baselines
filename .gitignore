@@ -2,16 +2,12 @@
 .venv/
 __pycache__/
 
-# Raw datasets (download from Kaggle / UCSB; see PROJECT_CONTEXT.md section 6)
-data/*.csv
-data/liar/
-# spaCy output, rebuilt automatically by step 2 (~25 min)
-data/cache/
+# Datasets and data/cache/ (saved spaCy/VADER output) ARE tracked on purpose:
+# a copy of this repository then runs in ~minutes with no downloads.
 
 # Run logs
 results/*.txt
 
 # Word lock files
 report/~$*
-# McIntire corpus (download: github.com/joolsa/fake_real_news_dataset)
-data/mcintire/
+results/logs/

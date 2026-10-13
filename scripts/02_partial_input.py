@@ -33,7 +33,8 @@ def main():
     forest = RandomForestClassifier(random_state=RANDOM_STATE, n_jobs=-1)
     result = run_experiment(features, labels, "e2c_metadata", model=forest)
     print_metrics(result)
-    importances = sorted(zip(features.columns, forest.feature_importances_), key=lambda p: -p[1])
+    fitted = result["pipeline"].named_steps["clf"]  # run_experiment fits a copy, not `forest` itself
+    importances = sorted(zip(features.columns, fitted.feature_importances_), key=lambda p: -p[1])
     print("  feature importances:")
     for feature, importance in importances:
         print(f"    {importance:.3f}  {feature}")
