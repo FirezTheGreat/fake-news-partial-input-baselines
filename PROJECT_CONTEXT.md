@@ -267,6 +267,7 @@ The planned table had six rows; E3b and the E4 control were added.
 WSMA/
 ├── PROJECT_CONTEXT.md      this file
 ├── requirements.txt        pinned versions
+├── README.md               how to reproduce (setup, data, run, expected numbers)
 ├── run.bat / run_all.py    `.\run` = whole pipeline; `.\run 3` = one step
 ├── .venv/                  project Python (system pip install fails on this PC)
 ├── data/                   True.csv, Fake.csv, liar/*.tsv, cache/ (spaCy output)
@@ -274,6 +275,7 @@ WSMA/
 │   ├── common.py           shared harness: load_isot, run_experiment, token dump
 │   ├── transforms.py       every input view (first sentence, function words, stripping,
 │   │                       metadata, sentiment, entities) + data/cache/ handling
+│   ├── 00_get_data.py      downloads LIAR + McIntire, SHA-256-verifies all datasets
 │   ├── 01_baseline.py      E1
 │   ├── 02_partial_input.py E2a, E2b, E2c, body-only
 │   ├── 03_stripped.py      E3, E3b

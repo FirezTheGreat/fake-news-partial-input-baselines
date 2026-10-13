@@ -1,6 +1,6 @@
 """Run the whole pipeline, or chosen steps.
 
-    run              all steps, 1 to 7
+    run              all steps, 0 to 7 (0 fetches and verifies the data)
     run 2            only step 2
     run 3 7          steps 3 and 7
 """
@@ -12,6 +12,7 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent / "scripts"
 STEPS = {
+    "0": "00_get_data.py",
     "1": "01_baseline.py",
     "2": "02_partial_input.py",
     "3": "03_stripped.py",
