@@ -1,0 +1,31 @@
+{
+  "name": "e5d_topic_metadata",
+  "input": "feature_matrix",
+  "model": "RandomForestClassifier",
+  "n_train": 22932,
+  "n_test": 5734,
+  "majority_baseline": 0.6088245552842693,
+  "accuracy": 0.858039762818277,
+  "precision": 0.8812304186841355,
+  "recall": 0.8862790031509596,
+  "f1": 0.8837475007140817,
+  "confusion_matrix": [
+    [
+      1826,
+      417
+    ],
+    [
+      397,
+      3094
+    ]
+  ],
+  "accuracy_splits": [
+    0.858039762818277,
+    0.8561213812347401,
+    0.8524590163934426,
+    0.8538542029996512,
+    0.8596093477502615
+  ],
+  "accuracy_mean": 0.8560167422392745,
+  "accuracy_sd": 0.0029302032820704227
+}

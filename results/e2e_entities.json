@@ -1,0 +1,31 @@
+{
+  "name": "e2e_entities",
+  "input": "feature_matrix",
+  "model": "RandomForestClassifier",
+  "n_train": 30915,
+  "n_test": 7729,
+  "majority_baseline": 0.5483244921723379,
+  "accuracy": 0.8105835166256954,
+  "precision": 0.8142635658914729,
+  "recall": 0.7522199942709825,
+  "f1": 0.7820131030375224,
+  "confusion_matrix": [
+    [
+      3639,
+      599
+    ],
+    [
+      865,
+      2626
+    ]
+  ],
+  "accuracy_splits": [
+    0.8105835166256954,
+    0.8114891965325398,
+    0.8188640186311296,
+    0.8186052529434596,
+    0.8182171044119549
+  ],
+  "accuracy_mean": 0.815551817828956,
+  "accuracy_sd": 0.004140857440383949
+}

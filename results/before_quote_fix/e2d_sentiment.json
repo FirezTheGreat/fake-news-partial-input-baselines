@@ -1,0 +1,31 @@
+{
+  "name": "e2d_sentiment",
+  "input": "feature_matrix",
+  "model": "RandomForestClassifier",
+  "n_train": 30915,
+  "n_test": 7729,
+  "majority_baseline": 0.5483244921723379,
+  "accuracy": 0.7365765299521283,
+  "precision": 0.7262830482115086,
+  "recall": 0.6688627900315096,
+  "f1": 0.696391291380853,
+  "confusion_matrix": [
+    [
+      3358,
+      880
+    ],
+    [
+      1156,
+      2335
+    ]
+  ],
+  "accuracy_splits": [
+    0.7365765299521283,
+    0.7351533186699444,
+    0.7447276491137276,
+    0.745503946176737,
+    0.7435632035192133
+  ],
+  "accuracy_mean": 0.7411049294863502,
+  "accuracy_sd": 0.004859182807145557
+}

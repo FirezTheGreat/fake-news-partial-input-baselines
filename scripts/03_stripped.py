@@ -1,4 +1,4 @@
-"""E3 — Artifact removal: strip source markers, retrain on full text.
+"""E3 — Artifact removal: strip source markers, retrain on full text (rules in transforms.py).
 
 E3  (as planned) applied identically to real and fake articles:
   1. the dateline, e.g. 'WASHINGTON (Reuters) - '
@@ -11,50 +11,22 @@ article prose, and normalises typography:
   5. URLs and pic.twitter.com links
   6. Twitter @handles
   7. media tags: '[Video]', '(Tweets)', 'WATCH:', 'BREAKING:', 'READ MORE:'
-  8. curly quotes, ellipsis and dashes mapped to their plain ASCII forms
-     (the fake scrape has no curly quotes at all; 50.8% of real articles do)
+  8. every apostrophe and quotation mark (curly or straight) replaced by a space,
+     ellipsis and dashes mapped to ASCII: the fake scrape lost these characters
+     (no curly quotes at all in fake vs 50.8% of real; "Trump s", "couldn t")
 
 The E1 -> E3 / E3b gap measures how much of the signal lives in removable
 markers (result: very little). The top coefficients printed afterwards show
 what is still separable once these are gone.
 """
 
-import re
-
 from common import load_isot, print_metrics, run_experiment, save_top_tokens
-
-# Broader than '^[A-Z ]+\(Reuters\) -' so it also catches 'WASHINGTON/BEIJING (Reuters) -'
-# and 'SAN JUAN, Puerto Rico (Reuters) -'. Only matches at the start of the body.
-DATELINE = re.compile(r"^[^\n]*?\(Reuters\)\s*-\s*")
-LEADING_SENTENCE = re.compile(r"^[^.\n]*[.\n]\s*")
-REUTERS = re.compile(r"reuters", re.IGNORECASE)
-
-IMAGE_CREDIT = re.compile(r"(featured\s+)?(image|photo|pic|video|screenshot|screen\s+capture|audio|gif)s?"
-                          r"\s+(via|credit|by|courtesy)\b[^\n]*", re.IGNORECASE)
-URL = re.compile(r"https?://\S+|www\.\S+|pic\.twitter\.com/\S+", re.IGNORECASE)
-HANDLE = re.compile(r"@\w+")
-MEDIA_TAG = re.compile(r"[\[(](videos?|tweets?|images?|photos?|watch|audio)[\])]"
-                       r"|\b(watch|breaking|read more|just in)\s*:", re.IGNORECASE)
-TYPOGRAPHY = str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"',
-                            "…": "...", "–": "-", "—": "-"})
-
-
-def strip_artifacts(text):
-    text = DATELINE.sub("", text, count=1)
-    text = LEADING_SENTENCE.sub("", text, count=1)
-    return REUTERS.sub("", text)
-
-
-def strip_page_furniture(text):
-    for pattern in (IMAGE_CREDIT, URL, HANDLE, MEDIA_TAG):
-        text = pattern.sub(" ", text)
-    return text.translate(TYPOGRAPHY)
+from transforms import stripped_titles_bodies, strip_page_furniture
 
 
 def main():
     df = load_isot()
-    titles = df["title"].map(lambda t: REUTERS.sub("", t))
-    bodies = df["text"].map(strip_artifacts)
+    titles, bodies = stripped_titles_bodies(df)
 
     print("=== E3 source markers stripped ===")
     result = run_experiment(titles + " " + bodies, df["label"], "e3_stripped")

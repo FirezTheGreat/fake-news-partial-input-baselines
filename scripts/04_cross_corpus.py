@@ -51,6 +51,13 @@ def main():
                             test_features=liar["statement"], test_labels=liar["binary"])
     print_metrics(result)
 
+    # Sensitivity check on the label mapping: half-true is the judgement call, so drop it.
+    print("\n=== E4 transfer, LIAR without half-true ===")
+    clear = liar[liar["label"] != "half-true"]
+    result = run_experiment(isot["title"], isot["label"], "e4_liar_no_halftrue",
+                            test_features=clear["statement"], test_labels=clear["binary"])
+    print_metrics(result)
+
 
 if __name__ == "__main__":
     main()

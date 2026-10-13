@@ -1,8 +1,8 @@
 """Run the whole pipeline, or chosen steps.
 
-    run              all steps, 1 to 5
+    run              all steps, 1 to 7
     run 2            only step 2
-    run 3 5          steps 3 and 5
+    run 3 7          steps 3 and 7
 """
 
 import os
@@ -16,7 +16,9 @@ STEPS = {
     "2": "02_partial_input.py",
     "3": "03_stripped.py",
     "4": "04_cross_corpus.py",
-    "5": "05_figures.py",
+    "5": "05_more_probes.py",
+    "6": "06_confounds.py",
+    "7": "07_figures.py",
 }
 
 

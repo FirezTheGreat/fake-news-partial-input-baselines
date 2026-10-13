@@ -44,24 +44,28 @@ def main():
 
     # Column 3: input conditions
     conditions = [
-        ("E1", "full text (title + body)"),
-        ("E2a", "first sentence only"),
-        ("E2b", "function words only (spaCy POS)"),
-        ("E2c", "8 surface statistics, no text"),
-        ("E3 / E3b", "source markers / page clutter stripped"),
-        ("E4", "headlines only"),
+        ("E1", ["full text (title + body)"]),
+        ("E2a–e", ["first sentence · function words ·", "8 statistics · sentiment · entities"]),
+        ("E3 / E3b / E3c", ["markers stripped · clutter stripped ·", "stripped + function words only"]),
+        ("E4", ["headlines only; tested on LIAR"]),
+        ("E5", ["US politics only (topic-matched)"]),
     ]
     box(ax, 7.8, 0.6, 4.1, 8.4, "Input conditions", fill=ORANGE_FILL, edge=ORANGE)
-    for i, (tag, desc) in enumerate(conditions):
-        y = 7.75 - i * 1.18
+    y = 8.05
+    for tag, lines in conditions:
+        y -= 0.62
         ax.text(8.05, y, tag, fontsize=9.5, fontweight="semibold", color=INK, va="center")
-        ax.text(8.05, y - 0.38, desc, fontsize=8.6, color=INK_2, va="center")
+        for line in lines:
+            y -= 0.4
+            ax.text(8.05, y, line, fontsize=8.6, color=INK_2, va="center")
+        y -= 0.25
     arrow(ax, (7.4, 7.15), (7.8, 7.15))
     arrow(ax, (3.4, 2.5), (7.8, 2.5))
 
     # Column 4: shared harness
-    box(ax, 12.6, 5.25, 3.3, 3.75, "run_experiment()", ["stratified 80/20 split", "(same split for all)",
-                                                       "TF-IDF + logistic", "regression", "(random forest for E2c)",
+    box(ax, 12.6, 4.85, 3.3, 4.15, "run_experiment()", ["stratified 80/20 split", "(same split for all)",
+                                                       "TF-IDF + logistic", "regression (SVM check)", "random forest for",
+                                                       "numeric features",
                                                        "5 random splits", "→ mean ± SD"],
         fill=BLUE_FILL, edge=BLUE)
     arrow(ax, (11.9, 7.1), (12.6, 7.1))
@@ -69,7 +73,7 @@ def main():
     # Column 4 bottom: outputs
     box(ax, 12.6, 1.6, 3.3, 2.0, "Outputs", ["metrics JSON per condition", "top coefficients (leak tokens)",
                                              "figures + results table"])
-    arrow(ax, (14.25, 5.25), (14.25, 3.6))
+    arrow(ax, (14.25, 4.85), (14.25, 3.6))
 
     fig.savefig(OUT, dpi=200, bbox_inches="tight", facecolor="white")
     print(f"wrote {OUT}")
