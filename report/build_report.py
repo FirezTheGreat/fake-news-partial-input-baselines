@@ -2,7 +2,7 @@
 
 WARNING: rebuilding OVERWRITES the .docx, including any edits made in Word.
 Needs python-docx (pip install python-docx). Usage, from the project root:
-    .venv\Scripts\python report\build_report.py .
+    .venv/Scripts/python report/build_report.py .
 then open the .docx in Word and press F9 (or right-click the contents > Update Field).
 """
 
