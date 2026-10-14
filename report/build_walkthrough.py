@@ -49,7 +49,11 @@ def md(text):
     for block in re.split(r"\n\s*\n", text.strip("\n")):
         lines = [l.strip() for l in block.strip().split("\n")]
         bullet = re.compile(r"^(- |\d+\. )")
-        if bullet.match(lines[0]):
+        if lines[0].startswith("### "):
+            out.append(f"<h3>{inline(lines[0][4:])}</h3>")
+            if len(lines) > 1:
+                out.append(f"<p>{inline(' '.join(lines[1:]))}</p>")
+        elif bullet.match(lines[0]):
             items, cur = [], None
             for l in lines:
                 if bullet.match(l):
@@ -204,17 +208,18 @@ def build():
 
     # ---------------- 1
     add('<h2 id="s1">1. How to use this guide</h2>' + md(r"""
-This guide is for the two people defending the project. It explains what every line of the
-experiment code does and, more importantly, **why** it is written that way, because "why" is
-what an examiner asks.
+This guide is for both of us. We present the same project together, and the examiner can put any
+question, about the results or about a line of code, to either of us. So both of us read all of it.
+It explains what every line of the experiment code does and, more importantly, **why** it is written
+that way, because "why" is what an examiner asks.
 
-Suggested reading order:
+Suggested reading order (the same for both of us):
 
-- **Everyone:** sections 2, 3 and 4 (the story, the vocabulary, the core ideas), then section 8
-  (results) and section 10 (questions).
-- **Whoever answers code questions:** all of section 7. Sections 7.2 (`common.py`) and 7.3
-  (`transforms.py`) matter most: every experiment goes through them.
-- **Whoever presents:** section 9 is your script. Section 6 gives you concrete examples to point at.
+1. Sections 2, 3 and 4: the story, the vocabulary, the core ideas.
+2. Section 7.2 (`common.py`) and 7.3 (`transforms.py`): every experiment goes through them, so most
+   code questions land here.
+3. Section 6 (worked example) and the rest of section 7, one script per experiment.
+4. Sections 8, 9 and 10: the results, how we present them, and the questions to expect.
 
 Code listings are copied from the files when this PDF is built, with the real line numbers, so
 "line 78 of common.py" in this guide is line 78 in the editor. Blank lines are left out.
@@ -1311,10 +1316,11 @@ hand-written and were extended once (disclosed, with before/after numbers).
 """) + f'<img class="fig" src="{(ROOT / "figures" / "fig1_accuracy.png").as_uri()}">')
 
     # ---------------- 9 presenter
-    add('<h2 id="s9">9. Presenter brief</h2>' + md(fr"""
-**What this section is.** A *presenter handoff* (or brief) is a short package that lets someone
-present work they did not build: the story in order, the numbers to memorise, what to say about each
-figure, and how to answer questions. This section is that brief.
+    add('<h2 id="s9">9. Presenter brief (for both of us)</h2>' + md(fr"""
+**What this section is.** A *presenter brief* is the short package for giving the talk: the story
+in order, who says which part, the numbers to memorise, what to say about each figure, and how to
+answer questions. We both present, so we both learn **all** of it: each of us should be able to give
+the whole talk alone and answer any question, including code questions.
 
 ### The story, in order (about 3 minutes)
 
@@ -1331,8 +1337,9 @@ Figure numbers are the report's.
 5. **Why (Figure 3).** "The strongest clues are 'Reuters', 'Washington', days of the week,
    'featured image via'. Publisher markers, not truth."
 6. **Stripping (Figure 4).** "We removed every marker from both classes. Still 97.3."
-7. **Topic (Figure 6).** "Same topic only, everything stripped, function words only: 90.3
-   against 60.9 chance."
+7. **Topic and classifier (Figures 6, 7).** "Same topic only, everything stripped, function words
+   only: 90.3 against 60.9 chance. And a different classifier, a linear SVM, does slightly better,
+   not worse."
 8. **Other datasets (Figure 5).** "Trained on ISOT, tested elsewhere: 45.5 on LIAR,
    below chance; 61.2 on a dataset of real articles from other outlets, calling two-thirds of genuine
    news fake."
@@ -1356,13 +1363,59 @@ Figure numbers are the report's.
             ["6 Topic-matched", "Same topic, still far above its 60.9% chance."],
             ["7 SVM check", "Orange dots (SVM) are slightly right of blue: a better model exploits the shortcut more."],
             ["8 Degradation", "Remove more and more information; accuracy falls slowly and never near chance."],
+        ]) + "<h3>Who says what</h3>" + table(["Part", "Story points", "Speaker", "Hand over with"], [
+            ["Part 1: the claim and the flaw", "1–3: hook, flaw, method (Figure 1)", "Speaker A",
+             "\"So what happens when we take the content away?\""],
+            ["Part 2: the evidence", "4–6: probes, tokens, stripping (Figures 2–4, 8)", "Speaker B",
+             "\"But maybe it's just topic, or just our classifier, or just this dataset.\""],
+            ["Part 3: the checks and the verdict", "7–9: topic, classifier, other datasets, conclusion (Figures 5–7)",
+             "Speaker A", "\"Thank you, we're happy to take questions.\""],
         ]) + md(r"""
-**Suggested split:** the presenter tells the story and walks the figures; the code owner takes
-questions about implementation (sections 4 and 7). Agree beforehand who answers "why logistic
-regression", "why stratified" and "did you change anything after seeing results" (both should know
-the answers).
+Decide who is A and who is B, then **swap roles in the second rehearsal**, so either of us can cover
+the other's part. Questions go to whoever is asked. If one of us is stuck, the other adds to the
+answer ("to add to that…"), without taking over.
 
-**Framing rules.** It *is* a fake news detector: we built one, and it is the thing under test. Never
+### Explaining the code in 60 seconds
+
+Both of us should be able to say this, ideally with `common.py` open:
+
+1. "`run.bat` runs `run_all.py`, which runs steps 0 to 7. Step 0 checks the data against
+   checksums."
+2. "`load_isot()` loads both CSVs, labels them 0 and 1 by file, and drops empty and duplicate
+   articles: 38,644 left."
+3. "Each experiment turns the articles into a restricted view, using a function in
+   `transforms.py`: first sentence, function words, eight numbers, stripped text."
+4. "Every view goes through one function, `run_experiment()`: the same stratified 80/20 split with
+   seed 42, TF-IDF and logistic regression inside a pipeline, five repeated splits, metrics saved to
+   JSON."
+5. "`07_figures.py` only reads those JSON files to draw the charts. So the only thing that differs
+   between experiments is the input."
+
+### Code questions we must both answer without notes
+
+- What `run_experiment` does, line by line (7.2, lines 75–127): split, fit, metrics, five splits,
+  cross-corpus mode.
+- Why `stratify=labels`, why seed 42, why five splits (4.6).
+- Why the TF-IDF is inside a `Pipeline` (4.7: no leakage from the test set).
+- The two cleaning rules in `load_isot` and why (7.2, lines 42–46).
+- How function words are extracted, and why `WHITESPACE_TFIDF` is needed (7.3, lines 16–23, 58–76).
+- What each stripping rule removes, including the typography rule and why it was extended once (7.3,
+  lines 101–145).
+- Why the random forest reads importances from `result["pipeline"]`, not from `forest` (7.6).
+- How the cross-corpus runs differ: no split, train on all of ISOT (7.2, lines 93–97; 7.8).
+
+### Preparation checklist (both of us)
+
+- Read sections 2–4, 7.2, 7.3, 8 and 10 at least twice.
+- Rehearse the talk twice, swapping parts, timed (about 3 minutes plus questions).
+- Quiz each other with section 10: one asks, the other answers without looking.
+- Each of us opens the code once and finds `run_experiment`, `load_isot`, `TYPOGRAPHY` and
+  `DATELINE` by line number.
+- If there is a demo: run `.\run` once on the presenting laptop beforehand (about 5 minutes).
+
+### Framing rules
+
+It *is* a fake news detector: we built one, and it is the thing under test. Never
 claim the project is the first to find problems with ISOT (Zhou et al. 2021 and Verma 2026 found
 related problems); our contribution is the style-only probes, stripping both classes, the topic
 control and two cross-corpus tests. State limitations without being asked.

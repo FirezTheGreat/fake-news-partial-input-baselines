@@ -4,10 +4,9 @@
 > instead of being re-briefed every session.
 >
 > **Ownership:** Abhishek builds and owns all code, experiments and analysis.
-> A teammate presents. She may or may not contribute code — the project is
-> scoped so that it ships regardless. Nothing here depends on her participation.
-> Section 12 is the handoff brief she needs in order to present work she did not
-> write.
+> Abhishek and his teammate present it together and must both be able to give the
+> whole talk and answer code questions. Section 12 is the shared presenter brief;
+> the full version is `report/Code_Walkthrough.pdf` (§9–10).
 
 ---
 
@@ -351,8 +350,9 @@ the list is in `07_figures.py`. fig3 shows E1, E3 and E3b.
 
 ## 12. Presenter handoff brief
 
-*For a teammate presenting work she did not write. Everything needed to speak to
-this confidently, without the code.*
+*For both presenters: the story, the numbers and the expected questions. The
+line-by-line code explanations, the speaking split and the prep checklist are in
+`report/Code_Walkthrough.pdf`.*
 
 **The pitch, in one line:** published fake news detectors report 99% accuracy; we
 tested whether they detect deception or just recognise which newsroom an article
@@ -401,8 +401,8 @@ cross-corpus 45.5% on LIAR, below its 55.8% chance (E4); full articles from othe
   fake". LIAR statements aren't written like Reuters, so it calls most of them
   fake.
 
-**What she needs from Abhishek before presenting:** the filled results table, the
-figures, and the leakage token list — all in `report/Code_Walkthrough.pdf` §8–10.
+**What both presenters need:** the results table, the figures and the leakage
+token list, all in `report/Code_Walkthrough.pdf` §8–10.
 
 ---
 
