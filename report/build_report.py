@@ -391,8 +391,8 @@ p("Figure 1 shows the pipeline. Both ISOT files are loaded and cleaned once. Eac
   "then transforms the cleaned articles into a different input — full text, a fragment of the text, a "
   "stylistic reduction of the text, or a vector of numbers — and passes it to one shared evaluation "
   "function. That function applies the same stratified train/test split, the same classifier and the same "
-  "metrics to every condition, so differences in accuracy can be attributed to the input alone. LIAR is "
-  "used only as an external test set. All metrics are written to disk, and the figures and tables in this "
+  "metrics to every condition, so differences in accuracy can be attributed to the input alone. LIAR "
+  "and the McIntire corpus are used as external test sets. All metrics are written to disk, and the figures and tables in this "
   "report are generated from those files.")
 figure(ROOT / "report" / "architecture.png", "Figure 1. System architecture.", width=Cm(16))
 
@@ -494,9 +494,11 @@ p("For every logistic regression model, the 30 words with the largest positive w
   "identify the publisher rather than the content.")
 h("5.5 Implementation", 2)
 p("The system is implemented in Python 3.10 with pandas 2.3, scikit-learn 1.7, spaCy 3.8, NLTK 3.10 "
-  "(VADER) and matplotlib 3.10. Part-of-speech and entity tagging of the corpus take about an hour in "
-  "total and are cached to disk. All experiments, figures and tables are then reproduced by a single "
-  "command in about fifteen minutes.")
+  "(VADER) and matplotlib 3.10. Part-of-speech and entity tagging of the corpora take about 1.5 hours and "
+  "are cached to disk. The repeated splits of each experiment are fitted in parallel, and independent "
+  "experiments run concurrently. The datasets and cached tagging output are distributed with the code, so "
+  "all experiments, figures and tables are reproduced by a single command in about five minutes, and a "
+  "checksum test confirms that the data is identical to the copy used here.")
 
 # ---------- 6 results ----------
 h("6. Results and Discussion", 1)

@@ -34,8 +34,8 @@ def main():
     # Column 1: data
     box(ax, 0.2, 6.1, 3.2, 2.1, "ISOT corpus", ["True.csv  (Reuters)", "Fake.csv  (flagged sites)",
                                                   "44,898 articles"])
-    box(ax, 0.2, 1.45, 3.2, 2.1, "LIAR corpus", ["PolitiFact statements", "12,836, 6-way → binary",
-                                                 "test only (E4)"])
+    box(ax, 0.2, 1.45, 3.2, 2.1, "External corpora", ["LIAR: 12,836 statements", "McIntire: 6,059 articles",
+                                                      "test only (E4, E4b)"])
 
     # Column 2: cleaning
     box(ax, 3.95, 6.1, 3.45, 2.1, "Cleaning", ["drop empty bodies (631)", "drop duplicate bodies (5,623)",
@@ -47,7 +47,7 @@ def main():
         ("E1", ["full text (title + body)"]),
         ("E2a–e", ["first sentence · function words ·", "8 statistics · sentiment · entities"]),
         ("E3 / E3b / E3c", ["markers stripped · clutter stripped ·", "stripped + function words only"]),
-        ("E4", ["headlines only; tested on LIAR"]),
+        ("E4 / E4b", ["headlines → LIAR · full text → McIntire"]),
         ("E5", ["US politics only (topic-matched)"]),
     ]
     box(ax, 7.8, 0.6, 4.1, 8.4, "Input conditions", fill=ORANGE_FILL, edge=ORANGE)
