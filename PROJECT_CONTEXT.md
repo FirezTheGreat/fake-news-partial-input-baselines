@@ -21,8 +21,9 @@ Web and Social Media Analytics (WSMA) lab project:
 - Must include lab-covered text processing (scraping, cleaning, tokenisation,
   stemming/lemmatisation, POS/NER, TF-IDF, sentiment)
   - *Covered:* cleaning (dedup, empty bodies), tokenisation, POS tagging (E2b),
-    TF-IDF, regex text processing (E3/E3b). *Decision (Abhishek, 2026-10-13):*
-    stemming, NER and sentiment are not being added.
+    NER (E2e), VADER sentiment (E2d), TF-IDF, regex text processing (E3/E3b).
+    Stemming/lemmatisation not used (it would not touch function words or
+    punctuation, where the signal is).
 - Must add prediction / ML beyond that
 - Must be grounded in named research papers
 - Teacher wants it research-paper shaped, not just an implementation
@@ -365,11 +366,11 @@ cross-corpus 45.5% on LIAR, below its 55.8% chance (E4); full articles from othe
 
 **Anticipated questions and answers:**
 
-- *"What's your accuracy?"* → Accuracy is what we're interrogating, not what we're
-  optimising. We're auditing a benchmark, not building a detector.
+- *"What's your accuracy?"* → Our detector gets 98.4%, like published results. The
+  project shows that number doesn't measure fake news detection.
 - *"Isn't fake news detection a common project?"* → It's common because it looks
-  easy, and it looks easy because the benchmark is broken. We're not building
-  another classifier; we're auditing why everyone's classifier reports 99%.
+  easy, and it looks easy because the benchmark is broken. We built the standard
+  detector and then tested why it (and everyone's) reports 98–99%.
 - *"What if you're wrong and accuracy doesn't drop?"* → That's a legitimate
   negative result and we report it. It would mean the linguistic signal is real,
   which is itself worth knowing. Either direction gives us a finding.
@@ -401,7 +402,7 @@ cross-corpus 45.5% on LIAR, below its 55.8% chance (E4); full articles from othe
   fake.
 
 **What she needs from Abhishek before presenting:** the filled results table, the
-four figures, and the leakage token list. Nothing else.
+figures, and the leakage token list — all in `report/Code_Walkthrough.pdf` §8–10.
 
 ---
 
@@ -497,8 +498,9 @@ mean no leakage; well above means leakage.
 
 ## 15. Framing rules — do not violate these
 
-- **This is not a fake news detector.** It's a benchmark audit. Any framing that
-  presents it as a detector undercuts the entire contribution.
+- **The detector is the thing under test.** We built a standard fake news
+  detector (E1, 98.4%) and then showed what its accuracy actually measures:
+  "We built a fake news detector, got 98%, then proved the 98% is fake."
 - **The project works even if the hypothesis is wrong.** Partial-input scores near
   chance would be a legitimate negative result. The project is not staked on a
   guess — say so when asked.

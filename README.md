@@ -85,7 +85,7 @@ data/        the three datasets and data/cache/ (saved spaCy/VADER output)
 scripts/     common.py (shared harness), transforms.py (input views), 00–07 (steps)
 results/     one JSON per experiment, top-coefficient lists, results_table.md
 figures/     the charts used in the report
-report/      the Word report, its generator and the architecture diagram
+report/      the Word report, Code_Walkthrough.pdf (line-by-line guide), their generators, the diagram
 ```
 
 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) has the full background, design decisions and findings.
