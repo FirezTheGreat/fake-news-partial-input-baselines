@@ -12,7 +12,6 @@ import sys
 from pathlib import Path
 
 from docx import Document
-from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_COLOR_INDEX
 from docx.oxml import OxmlElement
@@ -538,7 +537,7 @@ h("6.2 Partial-input probes (RQ1)", 2)
 e2a_tok = load("e2a_first_sentence_tokens")
 p(f"**First sentence.** The opening line alone gives {acc('e2a_first_sentence')} accuracy, slightly *higher* "
   f"than the full article ({acc('e1_baseline')}). The strongest feature is the word \"reuters\" (weight "
-  f"{e2a_tok['real'][0][1]:.1f}), more than four times the weight of any other. The next real-class features "
+  f"{e2a_tok['real'][0][1]:.1f}), about four times the weight of any other. The next real-class features "
   f"are dateline fragments: \"washington\", \"fla\", \"calif\", \"pa\", \"london\", \"york\" and the names of "
   f"weekdays. The dateline appears in {'99.2%'} of real articles and in fewer than 0.1% of fake ones. On "
   f"the fake side, the opening line is identified by words such as \"just\", \"we\", \"our\" and \"you\", "
@@ -572,7 +571,7 @@ p("Figure 3 shows the 15 strongest features of the E1 model for each class. The 
   "feature is \"reuters\", followed closely by \"said\", the attribution verb of wire reporting. Other real "
   "features are a dateline city, weekday names and \"told\". On the fake side, seven of the 15 strongest "
   "features are page clutter rather than prose: \"via\", \"video\", \"image\", \"featured\", \"read\", "
-  "\"watch\" and \"com\" come from image credits, embedded media and links. The phrase \"Featured image via\" alone appears in 46.8% of fake articles and in no real article.")
+  "\"watch\" and \"com\" come from image credits, embedded media and links. The phrase \"Featured image via\" alone appears in 34.9% of fake articles and in no real article.")
 figure(FIGURES / "fig2_leakage_tokens.png", "Figure 3. Strongest logistic regression features per class (E1). "
                                             "Orange marks source and page-clutter markers.")
 PROVENANCE = {"reuters", "washington", "edt", "via", "image", "images", "getty", "featured", "pic", "https",

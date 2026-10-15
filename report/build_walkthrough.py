@@ -75,7 +75,7 @@ def code_block(path, start, end):
     rows = []
     for n in range(start, end + 1):
         rows.append(f'<span class="ln">{n}</span>{html.escape(lines[n - 1]) or " "}')
-    return f'<pre class="code">' + "\n".join(rows) + "</pre>"
+    return '<pre class="code">' + "\n".join(rows) + "</pre>"
 
 
 def table(headers, rows, cls=""):
@@ -167,7 +167,7 @@ def build():
     add = S.append
 
     # ---------------- cover + contents
-    add(f"""
+    add("""
 <div class="cover">
   <div class="kicker">WSMA lab project · code walkthrough and viva guide</div>
   <h1 class="title">Partial-Input Baselines Reveal Construction Artifacts in Fake News Benchmarks</h1>
@@ -416,9 +416,9 @@ about fake news detection.
         + table(["Short form", "In full", "Where it appears"], venues, "gl"))
 
     # ---------------- 4 core ideas
-    add('<h2 id="s4">4. Core ideas you need before reading the code</h2>' + md(fr"""
+    add('<h2 id="s4">4. Core ideas you need before reading the code</h2>' + md(r"""
 ### 4.1 TF-IDF: turning text into numbers
-""").replace("<p>### 4.1 TF-IDF: turning text into numbers</p>", "<h3>4.1 TF-IDF: turning text into numbers</h3>") + md(r"""
+
 A classifier only understands numbers. `TfidfVectorizer` first learns a **vocabulary** from the
 training articles (every distinct word; with default settings, words of two or more letters,
 lowercased). Each article then becomes one long row of numbers, one per vocabulary word, almost all
@@ -465,7 +465,7 @@ much each feature helped, summing to 1.
 A linear Support Vector Machine also draws a straight boundary, but chooses the one with the widest
 gap (margin) between the classes. We rerun four conditions with it to answer "is this just because
 you used logistic regression?". It scores slightly *higher* every time.
-""") + "<h3>4.5 Metrics, using the E1 confusion matrix</h3>" + md(fr"""
+""") + "<h3>4.5 Metrics, using the E1 confusion matrix</h3>" + md(r"""
 Fake is the **positive** class (label 1), real is 0. The E1 test set has 7,729 articles:
 """) + table(["", "Predicted real", "Predicted fake"], [
         ["**Actually real** (4,238)", f"{tn:,}  (TN: correct)", f"{fp:,}  (FP: real wrongly called fake)"],
@@ -1292,7 +1292,7 @@ fixed external test sets), F1 and chance for every condition.
 The full table, exactly as produced by step 7. "Accuracy" is the seed-42 split; "Mean ± SD" is over
 five random splits; "Chance" is always guessing the larger class of that test set.
 """) + table(["Condition", "What the model sees", "Accuracy", "Mean ± SD", "F1 (fake)", "Chance"],
-             results_rows, "res") + md(fr"""
+             results_rows, "res") + md(r"""
 **How to read it, group by group:**
 
 - **E1 vs E2 (RQ1).** A model that sees only the first sentence (99.1%), only function words (96.8%)
@@ -1316,7 +1316,7 @@ hand-written and were extended once (disclosed, with before/after numbers).
 """) + f'<img class="fig" src="{(ROOT / "figures" / "fig1_accuracy.png").as_uri()}">')
 
     # ---------------- 9 presenter
-    add('<h2 id="s9">9. Presenter brief</h2>' + md(fr"""
+    add('<h2 id="s9">9. Presenter brief</h2>' + md(r"""
 **What this section is.** A *presenter brief* is the short package for giving the talk: the story
 in order, the numbers to memorise, what to say about each figure, and how to answer questions. You
 present alone, so the talk and every question, including code questions, are yours.
@@ -1344,8 +1344,7 @@ Figure numbers are the report's.
    news fake."
 9. **Conclusion.** "The 98 percent measures the newsroom, not the truth. Fake news detectors should be
    tested across sources and alongside partial-input baselines, not on a single benchmark split."
-""").replace("<p>### The story, in order (about 3 minutes)</p>", "<h3>The story, in order (about 3 minutes)</h3>")
-        + "<h3>Numbers to memorise</h3>" + table(["Number", "What it is"], [
+""") + "<h3>Numbers to memorise</h3>" + table(["Number", "What it is"], [
             ["**98.4%**", "E1, my detector, full text"], ["**54.8%**", "chance on ISOT"],
             ["**99.1%**", "E2a, first sentence only"], ["**96.8%**", "E2b, function words only (the headline)"],
             ["**86.2%**", "E2c, eight numbers, no words"], ["**97.3%**", "E3b, every marker stripped from both classes"],

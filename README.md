@@ -2,8 +2,11 @@
 
 A fake news detector trained on the ISOT dataset scores 98.4%. This project tests whether that
 number measures fake news detection. It doesn't: models that never see an article's content still
-score up to 97%, and the detector drops to 45–61% on other datasets. Full write-up:
-[report/WSMA_Report.docx](report/WSMA_Report.docx).
+score up to 97%, and the detector drops to 45–61% on other datasets.
+
+- Report: [report/WSMA_Report.pdf](report/WSMA_Report.pdf)
+- Line-by-line code walkthrough, glossary and viva guide:
+  [report/Code_Walkthrough.pdf](report/Code_Walkthrough.pdf)
 
 ## Reproduce it
 
@@ -68,15 +71,13 @@ All splits use a fixed seed, so a correct reproduction gives these numbers exact
 
 The full table, with all 25 conditions, is in [results/results_table.md](results/results_table.md).
 
-## Rebuilding the report
+## The documents
 
-```bash
-.venv\Scripts\python report\build_report.py .
-```
-
-This regenerates `report/WSMA_Report.docx` from the results and figures. **It overwrites the file,
-including any edits made in Word.** Open it in Word afterwards and press F9 to update the contents
-page.
+`report/WSMA_Report.docx` is the final, hand-edited report. `report/build_report.py` produced its
+first draft; **don't run it again**, because it would overwrite the edited version.
+`report/Code_Walkthrough.pdf` is rebuilt from the code with
+`.venv\Scripts\python report\build_walkthrough.py` (needs Microsoft Edge), so its listings always
+match the scripts.
 
 ## Layout
 
@@ -85,7 +86,7 @@ data/        the three datasets and data/cache/ (saved spaCy/VADER output)
 scripts/     common.py (shared harness), transforms.py (input views), 00–07 (steps)
 results/     one JSON per experiment, top-coefficient lists, results_table.md
 figures/     the charts used in the report
-report/      the Word report, Code_Walkthrough.pdf (line-by-line guide), their generators, the diagram
+report/      the report (.docx and .pdf), Code_Walkthrough.pdf, their generators, the diagram
 ```
 
 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) has the full background, design decisions and findings.
