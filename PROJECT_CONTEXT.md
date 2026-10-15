@@ -3,10 +3,10 @@
 > Working context file. Keep this in the project root so Claude Code can read it
 > instead of being re-briefed every session.
 >
-> **Ownership:** Abhishek builds and owns all code, experiments and analysis.
-> Abhishek and his teammate present it together and must both be able to give the
-> whole talk and answer code questions. Section 12 is the shared presenter brief;
-> the full version is `report/Code_Walkthrough.pdf` (§9–10).
+> **Ownership:** Abhishek works on this project alone (a former teammate, Yuvika,
+> is no longer part of it). He builds the code, writes the report, gives the whole
+> talk and answers every question. Section 12 is the presenter brief; the full
+> version is `report/Code_Walkthrough.pdf` (§9–10).
 
 ---
 
@@ -348,10 +348,10 @@ the list is in `07_figures.py`. fig3 shows E1, E3 and E3b.
 
 ---
 
-## 12. Presenter handoff brief
+## 12. Presenter brief
 
-*For both presenters: the story, the numbers and the expected questions. The
-line-by-line code explanations, the speaking split and the prep checklist are in
+*Abhishek presents alone. The story, the numbers and the expected questions. The
+line-by-line code explanations, the talk structure and the prep checklist are in
 `report/Code_Walkthrough.pdf`.*
 
 **The pitch, in one line:** published fake news detectors report 99% accuracy; we
@@ -401,7 +401,7 @@ cross-corpus 45.5% on LIAR, below its 55.8% chance (E4); full articles from othe
   fake". LIAR statements aren't written like Reuters, so it calls most of them
   fake.
 
-**What both presenters need:** the results table, the figures and the leakage
+**What the presenter needs:** the results table, the figures and the leakage
 token list, all in `report/Code_Walkthrough.pdf` §8–10.
 
 ---
@@ -530,8 +530,10 @@ mean no leakage; well above means leakage.
 
 **Done:** pipeline E1–E5 + E4b (McIntire) + SVM check + robustness (7 steps, `.\run`);
 7 figures; results table; architecture diagram; citations verified (incl. Verma DOI, page confirmed
-real; McIntire dataset cited); Word report (`report/WSMA_Report.docx`, 21 pages, yellow placeholders;
-`report/build_report.py` regenerates it and OVERWRITES Word edits). Framing agreed: "we built a detector,
+real; McIntire dataset cited); Word report (`report/WSMA_Report.docx`, 21 pages, title page filled in
+by hand, sole author Abhishek; `report/build_report.py` regenerates it and OVERWRITES Word edits);
+`report/Code_Walkthrough.pdf` (line-by-line guide, glossary, presenter brief, viva Q&A); repo on GitHub
+(FirezTheGreat/fake-news-partial-input-baselines). Framing agreed: "we built a detector,
 got 98%, proved the 98% is fake". Lab topics covered: tokenisation, cleaning, POS (E2b/E3c/E5c),
 NER (E2e), sentiment (E2d), TF-IDF. Not done by decision: stemming/lemmatisation, transformer check.
 
@@ -539,5 +541,5 @@ All threats that could be tested have been: topic (E5), classifier (SVM), LIAR m
 transfer (E4b). Remaining stated limitations: probes run in depth on ISOT only; classical models only;
 hand-written stripping rules (extended once, disclosed).
 
-**Remaining:** fill report placeholders and export PDF; read/reword the report; viva walkthrough of
-scripts 02–07; presenter handoff (section 12 is current).
+**Remaining (Abhishek):** rehearse with the walkthrough's presenter brief. Report reworded and
+finalised by Abhishek; PDF export at `report/WSMA_Report.pdf`.

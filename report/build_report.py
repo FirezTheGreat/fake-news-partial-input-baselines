@@ -220,7 +220,6 @@ for _ in range(3):
     doc.add_paragraph()
 p("**Submitted by**", align=WD_ALIGN_PARAGRAPH.CENTER)
 p("[[Your full name]]  —  [[Roll number]]", align=WD_ALIGN_PARAGRAPH.CENTER)
-p("[[Teammate's full name]]  —  [[Roll number]]", align=WD_ALIGN_PARAGRAPH.CENTER)
 doc.add_paragraph()
 p("**Submitted to**", align=WD_ALIGN_PARAGRAPH.CENTER)
 p("[[Instructor's name and title]]", align=WD_ALIGN_PARAGRAPH.CENTER)

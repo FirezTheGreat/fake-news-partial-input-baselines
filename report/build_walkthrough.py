@@ -208,18 +208,18 @@ def build():
 
     # ---------------- 1
     add('<h2 id="s1">1. How to use this guide</h2>' + md(r"""
-This guide is for both of us. We present the same project together, and the examiner can put any
-question, about the results or about a line of code, to either of us. So both of us read all of it.
-It explains what every line of the experiment code does and, more importantly, **why** it is written
-that way, because "why" is what an examiner asks.
+This guide is for presenting and defending the project on your own: every question, about the
+results or about a line of code, comes to you, so read all of it. It explains what every line of the
+experiment code does and, more importantly, **why** it is written that way, because "why" is what an
+examiner asks.
 
-Suggested reading order (the same for both of us):
+Suggested reading order:
 
 1. Sections 2, 3 and 4: the story, the vocabulary, the core ideas.
 2. Section 7.2 (`common.py`) and 7.3 (`transforms.py`): every experiment goes through them, so most
    code questions land here.
 3. Section 6 (worked example) and the rest of section 7, one script per experiment.
-4. Sections 8, 9 and 10: the results, how we present them, and the questions to expect.
+4. Sections 8, 9 and 10: the results, how to present them, and the questions to expect.
 
 Code listings are copied from the files when this PDF is built, with the real line numbers, so
 "line 78 of common.py" in this guide is line 78 in the editor. Blank lines are left out.
@@ -227,7 +227,7 @@ Code listings are copied from the files when this PDF is built, with the real li
 
     # ---------------- 2
     add('<h2 id="s2">2. The project in two minutes</h2>' + md(fr"""
-**The one-line story:** *we built a fake news detector, got 98%, then proved the 98% is fake.*
+**The one-line story:** *I built a fake news detector, got 98%, then proved the 98% is fake.*
 
 **The dataset.** ISOT is the most widely used fake news benchmark. Its 44,898 articles come in two
 files: `True.csv` (21,417 articles, all from the Reuters news agency) and `Fake.csv` (23,481
@@ -1316,27 +1316,26 @@ hand-written and were extended once (disclosed, with before/after numbers).
 """) + f'<img class="fig" src="{(ROOT / "figures" / "fig1_accuracy.png").as_uri()}">')
 
     # ---------------- 9 presenter
-    add('<h2 id="s9">9. Presenter brief (for both of us)</h2>' + md(fr"""
+    add('<h2 id="s9">9. Presenter brief</h2>' + md(fr"""
 **What this section is.** A *presenter brief* is the short package for giving the talk: the story
-in order, who says which part, the numbers to memorise, what to say about each figure, and how to
-answer questions. We both present, so we both learn **all** of it: each of us should be able to give
-the whole talk alone and answer any question, including code questions.
+in order, the numbers to memorise, what to say about each figure, and how to answer questions. You
+present alone, so the talk and every question, including code questions, are yours.
 
 ### The story, in order (about 3 minutes)
 
 Figure numbers are the report's.
 
-1. **Hook.** "Fake news detectors on the ISOT benchmark report 98 to 99 percent. We built one and
-   got 98.4. Then we tested whether that number means anything."
+1. **Hook.** "Fake news detectors on the ISOT benchmark report 98 to 99 percent. I built one and
+   got 98.4. Then I tested whether that number means anything."
 2. **The flaw.** "Every real article in ISOT comes from Reuters; every fake one from a set of flagged
    websites. So a model could be recognising the newsroom instead of the lie." Hospital analogy.
-3. **The method.** "Partial-input baselines, from Gururangan et al. 2018: we train models that are
+3. **The method.** "Partial-input baselines, from Gururangan et al. 2018: I trained models that are
    *not allowed* to see the content. If they still score high, the dataset is leaking the answer."
 4. **Probes (Figure 2).** "The first sentence alone: 99.1. Only words like 'the, of, a' and
    punctuation: 96.8. Eight numbers like word count and question marks: 86.2. Chance is 54.8."
 5. **Why (Figure 3).** "The strongest clues are 'Reuters', 'Washington', days of the week,
    'featured image via'. Publisher markers, not truth."
-6. **Stripping (Figure 4).** "We removed every marker from both classes. Still 97.3."
+6. **Stripping (Figure 4).** "I removed every marker from both classes. Still 97.3."
 7. **Topic and classifier (Figures 6, 7).** "Same topic only, everything stripped, function words
    only: 90.3 against 60.9 chance. And a different classifier, a linear SVM, does slightly better,
    not worse."
@@ -1347,7 +1346,7 @@ Figure numbers are the report's.
    tested across sources and alongside partial-input baselines, not on a single benchmark split."
 """).replace("<p>### The story, in order (about 3 minutes)</p>", "<h3>The story, in order (about 3 minutes)</h3>")
         + "<h3>Numbers to memorise</h3>" + table(["Number", "What it is"], [
-            ["**98.4%**", "E1, our detector, full text"], ["**54.8%**", "chance on ISOT"],
+            ["**98.4%**", "E1, my detector, full text"], ["**54.8%**", "chance on ISOT"],
             ["**99.1%**", "E2a, first sentence only"], ["**96.8%**", "E2b, function words only (the headline)"],
             ["**86.2%**", "E2c, eight numbers, no words"], ["**97.3%**", "E3b, every marker stripped from both classes"],
             ["**90.3% vs 60.9%**", "E5c, US politics only + stripped + function words, vs chance"],
@@ -1363,21 +1362,21 @@ Figure numbers are the report's.
             ["6 Topic-matched", "Same topic, still far above its 60.9% chance."],
             ["7 SVM check", "Orange dots (SVM) are slightly right of blue: a better model exploits the shortcut more."],
             ["8 Degradation", "Remove more and more information; accuracy falls slowly and never near chance."],
-        ]) + "<h3>Who says what</h3>" + table(["Part", "Story points", "Speaker", "Hand over with"], [
-            ["Part 1: the claim and the flaw", "1–3: hook, flaw, method (Figure 1)", "Speaker A",
-             "\"So what happens when we take the content away?\""],
-            ["Part 2: the evidence", "4–6: probes, tokens, stripping (Figures 2–4, 8)", "Speaker B",
-             "\"But maybe it's just topic, or just our classifier, or just this dataset.\""],
+        ]) + "<h3>Talk structure and transitions</h3>" + table(["Part", "Story points", "Time", "Move on with"], [
+            ["Part 1: the claim and the flaw", "1–3: hook, flaw, method (Figure 1)", "about 1 min",
+             "\"So what happens when I take the content away?\""],
+            ["Part 2: the evidence", "4–6: probes, tokens, stripping (Figures 2–4, 8)", "about 1 min",
+             "\"But maybe it's just topic, or just my classifier, or just this dataset.\""],
             ["Part 3: the checks and the verdict", "7–9: topic, classifier, other datasets, conclusion (Figures 5–7)",
-             "Speaker A", "\"Thank you, we're happy to take questions.\""],
+             "about 1 min", "\"Thank you, I'm happy to take questions.\""],
         ]) + md(r"""
-Decide who is A and who is B, then **swap roles in the second rehearsal**, so either of us can cover
-the other's part. Questions go to whoever is asked. If one of us is stuck, the other adds to the
-answer ("to add to that…"), without taking over.
+The transition lines are signposts: each one names the objection the next part answers, which keeps
+the examiner following the argument. If a question comes mid-talk, answer it briefly and return to
+the next story point.
 
 ### Explaining the code in 60 seconds
 
-Both of us should be able to say this, ideally with `common.py` open:
+Be able to say this, ideally with `common.py` open:
 
 1. "`run.bat` runs `run_all.py`, which runs steps 0 to 7. Step 0 checks the data against
    checksums."
@@ -1391,7 +1390,7 @@ Both of us should be able to say this, ideally with `common.py` open:
 5. "`07_figures.py` only reads those JSON files to draw the charts. So the only thing that differs
    between experiments is the input."
 
-### Code questions we must both answer without notes
+### Code questions to answer without notes
 
 - What `run_experiment` does, line by line (7.2, lines 75–127): split, fit, metrics, five splits,
   cross-corpus mode.
@@ -1404,47 +1403,48 @@ Both of us should be able to say this, ideally with `common.py` open:
 - Why the random forest reads importances from `result["pipeline"]`, not from `forest` (7.6).
 - How the cross-corpus runs differ: no split, train on all of ISOT (7.2, lines 93–97; 7.8).
 
-### Preparation checklist (both of us)
+### Preparation checklist
 
 - Read sections 2–4, 7.2, 7.3, 8 and 10 at least twice.
-- Rehearse the talk twice, swapping parts, timed (about 3 minutes plus questions).
-- Quiz each other with section 10: one asks, the other answers without looking.
-- Each of us opens the code once and finds `run_experiment`, `load_isot`, `TYPOGRAPHY` and
-  `DATELINE` by line number.
+- Rehearse the talk out loud at least twice, timed (about 3 minutes plus questions). Recording
+  yourself once on your phone shows where you rush or hesitate.
+- Self-quiz with section 10: read only the question, answer out loud, then check the answer.
+- Open the code once and find `run_experiment`, `load_isot`, `TYPOGRAPHY` and `DATELINE` by line
+  number.
 - If there is a demo: run `.\run` once on the presenting laptop beforehand (about 5 minutes).
 
 ### Framing rules
 
-It *is* a fake news detector: we built one, and it is the thing under test. Never
+It *is* a fake news detector: I built one, and it is the thing under test. Never
 claim the project is the first to find problems with ISOT (Zhou et al. 2021 and Verma 2026 found
-related problems); our contribution is the style-only probes, stripping both classes, the topic
+related problems); the contribution is the style-only probes, stripping both classes, the topic
 control and two cross-corpus tests. State limitations without being asked.
 """))
 
     # ---------------- 10 Q&A
     qa = [
-        ("What's your accuracy?", "Our detector gets 98.4%, like published results. The project shows that number doesn't measure fake news detection: models that can't see the content score almost the same, and the detector fails on other datasets."),
-        ("So is this a fake news detector or not?", "Yes: we built one (E1), and then tested it. The detector is the object under test. The finding is about what its accuracy means."),
-        ("Isn't fake news detection a common, solved project?", "It looks solved because ISOT makes it look easy. We show why: the classes can be told apart by publisher style alone."),
-        ("Hasn't someone already shown this?", "Partly. Zhou et al. (2021) showed fake news datasets leak source identity, and Verma (2026, a preprint) audited this same corpus by removing tags and metadata. Our stripping and transfer results agree with theirs. What we add: style-only probes (function words: 96.8%), stripping both classes' markers, a topic-matched control and a full-article cross-corpus test."),
+        ("What's your accuracy?", "My detector gets 98.4%, like published results. The project shows that number doesn't measure fake news detection: models that can't see the content score almost the same, and the detector fails on other datasets."),
+        ("So is this a fake news detector or not?", "Yes: I built one (E1), and then tested it. The detector is the object under test. The finding is about what its accuracy means."),
+        ("Isn't fake news detection a common, solved project?", "It looks solved because ISOT makes it look easy. I show why: the classes can be told apart by publisher style alone."),
+        ("Hasn't someone already shown this?", "Partly. Zhou et al. (2021) showed fake news datasets leak source identity, and Verma (2026, a preprint) audited this same corpus by removing tags and metadata. My stripping and transfer results agree with theirs. What I add: style-only probes (function words: 96.8%), stripping both classes' markers, a topic-matched control and a full-article cross-corpus test."),
         ("What is a partial-input baseline?", "A model deliberately given only part of the input. If it still scores well, that part leaks the label. Gururangan et al. (2018) used it to expose artifacts in NLI data."),
-        ("Why logistic regression and not BERT?", "Its weights are readable: one per word, so we can see exactly what it relies on (report Figure 3). It's the standard TF-IDF baseline and matches published ISOT results. A stronger model would likely exploit the same shortcuts at least as well (the SVM already does) and would hide what it uses. Transformers are named as a limitation and as future work."),
+        ("Why logistic regression and not BERT?", "Its weights are readable: one per word, so I can see exactly what it relies on (report Figure 3). It's the standard TF-IDF baseline and matches published ISOT results. A stronger model would likely exploit the same shortcuts at least as well (the SVM already does) and would hide what it uses. Transformers are named as a limitation and as future work."),
         ("Why a random forest for E2c/E2d/E2e?", "Those inputs are a few numbers, where useful rules are thresholds and combinations; trees capture those. It also gives feature importances."),
         ("Why stratified splitting?", "It keeps the real/fake ratio identical in train and test, so accuracy and chance aren't shifted by a lucky split, and chance is the same across experiments."),
         ("Why 80/20 and seed 42?", "80/20 is conventional and leaves 7,729 test articles (≈77 per percentage point). The seed fixes the split so every experiment uses the same test articles and anyone gets identical numbers. Any fixed number works; 42 is convention."),
-        ("How do you know results aren't a lucky split?", "Each experiment is repeated on 5 random splits; SDs are 0.1–0.5 points, much smaller than the differences we interpret."),
-        ("Why is chance 54.8% and not 50%?", "After removing empty and duplicate articles (mostly fake), ISOT is 54.8% real. We measure chance on each test set rather than assume 50%."),
-        ("Why remove duplicates and empty articles?", "Duplicates across train and test let the model be tested on articles it memorised. 630 of 631 empty bodies were fake, so 'empty = fake' would be a leak we created."),
+        ("How do you know results aren't a lucky split?", "Each experiment is repeated on 5 random splits; SDs are 0.1–0.5 points, much smaller than the differences I interpret."),
+        ("Why is chance 54.8% and not 50%?", "After removing empty and duplicate articles (mostly fake), ISOT is 54.8% real. I measure chance on each test set rather than assume 50%."),
+        ("Why remove duplicates and empty articles?", "Duplicates across train and test let the model be tested on articles it memorised. 630 of 631 empty bodies were fake, so 'empty = fake' would be a leak I would have created."),
         ("Why does the first sentence beat the full article?", "In Reuters copy the opening contains the dateline (city, '(Reuters)'). It's an almost pure source label; the rest of the article dilutes it."),
         ("Why did removing 'Reuters' barely change anything?", "The source isn't in one word; it's the whole register: wire reporting says 'said', 'told reporters', 'amid'; partisan blogs say 'this', 'just', 'you', '!' and '?'."),
         ("Isn't it just topic? Real has world news.", "Tested in E5: US politics only, all markers stripped, function words only: 90.3% vs 60.9% chance."),
-        ("Is it because of your classifier?", "No. A linear SVM is slightly higher on every condition we reran."),
+        ("Is it because of your classifier?", "No. A linear SVM is slightly higher on every condition I reran."),
         ("Why is LIAR below chance?", "The model learned 'not written like Reuters = fake'. Politicians' statements aren't written like Reuters, so it calls 78% of the true ones fake."),
         ("LIAR is only short statements. Unfair?", "That's why there's an in-domain control (ISOT headlines: 94.6%) and a second, full-article test (McIntire: 61.2%, while a model trained on McIntire gets 91.9%)."),
-        ("Why count half-true as real?", "It's a judgement call, so we also ran it without half-true: 51.1% vs 55.6% chance. Same conclusion."),
-        ("Did you change anything after seeing results?", "Once, disclosed: E5c's coefficients showed straight apostrophes still separated the classes (a scraping artifact), so the typography rule was extended to all quote marks in both classes. It lowered our own numbers (E5c 98.0 → 90.3%). Both versions are kept and reported."),
-        ("Why no stemming or lemmatisation?", "They merge word forms (said/says → say). The signal we study is in function words and punctuation, which stemming doesn't change, and the published ISOT baselines don't stem. We do use POS tagging, NER, sentiment, regex cleaning and TF-IDF."),
-        ("Why not remove stop words?", "Stop words are function words: the style signal lives there. Removing them would hide the effect we are measuring."),
+        ("Why count half-true as real?", "It's a judgement call, so I also ran it without half-true: 51.1% vs 55.6% chance. Same conclusion."),
+        ("Did you change anything after seeing results?", "Once, disclosed: E5c's coefficients showed straight apostrophes still separated the classes (a scraping artifact), so the typography rule was extended to all quote marks in both classes. It lowered my own numbers (E5c 98.0 → 90.3%). Both versions are kept and reported."),
+        ("Why no stemming or lemmatisation?", "They merge word forms (said/says → say). The signal I study is in function words and punctuation, which stemming doesn't change, and the published ISOT baselines don't stem. I do use POS tagging, NER, sentiment, regex cleaning and TF-IDF."),
+        ("Why not remove stop words?", "Stop words are function words: the style signal lives there. Removing them would hide the effect I am measuring."),
         ("Could TF-IDF leak test information?", "No. It sits inside a scikit-learn Pipeline, so its vocabulary and IDF weights are learned from the training split only."),
         ("What would fix the benchmark?", "Evaluate across sources (train on some publishers, test on others), report partial-input baselines next to the main result, and build datasets where real and fake come from the same kinds of sources, labelled per claim."),
         ("Can I reproduce it?", "Yes: one command, about 5 minutes, with checksum-verified data and fixed seeds; the README lists the exact numbers you should get."),
