@@ -4,7 +4,8 @@ A fake news detector trained on the ISOT dataset scores 98.4%. This project test
 number measures fake news detection. It doesn't: models that never see an article's content still
 score up to 97%, and the detector drops to 45–61% on other datasets.
 
-- Report: [report/WSMA_Report.pdf](report/WSMA_Report.pdf)
+- Report (IEEE format, as submitted): [report/WSMA_Report_IEEE.pdf](report/WSMA_Report_IEEE.pdf);
+  single-column version: [report/WSMA_Report.pdf](report/WSMA_Report.pdf)
 - Line-by-line code walkthrough, glossary and viva guide:
   [report/Code_Walkthrough.pdf](report/Code_Walkthrough.pdf)
 
@@ -75,6 +76,8 @@ The full table, with all 25 conditions, is in [results/results_table.md](results
 
 `report/WSMA_Report.docx` is the final, hand-edited report. `report/build_report.py` produced its
 first draft; **don't run it again**, because it would overwrite the edited version.
+`report/build_ieee.py` converts the edited report into the IEEE two-column version
+(`WSMA_Report_IEEE.docx`; export to PDF from Word) without changing its text.
 `report/Code_Walkthrough.pdf` is rebuilt from the code with
 `.venv\Scripts\python report\build_walkthrough.py` (needs Microsoft Edge), so its listings always
 match the scripts.

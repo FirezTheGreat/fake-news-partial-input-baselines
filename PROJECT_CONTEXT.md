@@ -126,12 +126,15 @@ scripts/transforms.py    every restricted view + caching
 scripts/00–07            data check, E1, E2, E3, E4, more probes + SVM, E5, figures
 results/                 one JSON per experiment, *_tokens.json, results_table.md, before_quote_fix/
 figures/                 seven charts used in the report
-report/                  WSMA_Report.docx/.pdf (final, hand-edited), Code_Walkthrough.pdf,
+report/                  WSMA_Report.docx/.pdf (final, hand-edited), WSMA_Report_IEEE.docx/.pdf
+                         (IEEE two-column version, the one to submit), Code_Walkthrough.pdf,
                          their generators, architecture diagram
 ```
 
 `report/build_report.py` generated the first draft of the report; running it again **overwrites**
-the hand-edited final version. `report/build_walkthrough.py` rebuilds the walkthrough PDF from the
+the hand-edited final version. `report/build_ieee.py` converts the edited report to IEEE format
+(text unchanged; citations become [n], sections I/II, "Fig."/"TABLE I" captions); rerun it after any
+edit to the .docx, then export the PDF from Word. `report/build_walkthrough.py` rebuilds the walkthrough PDF from the
 code (safe to rerun). GitHub: FirezTheGreat/fake-news-partial-input-baselines.
 
 ## 8. Rules
