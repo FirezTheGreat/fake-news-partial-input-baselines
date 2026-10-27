@@ -5,7 +5,8 @@ number measures fake news detection. It doesn't: models that never see an articl
 score up to 97%, and the detector drops to 45–61% on other datasets.
 
 - Report (IEEE format): [report/WSMA_Report.pdf](report/WSMA_Report.pdf)
-- Presentation slides (with speaker notes): [report/WSMA_Presentation.pptx](report/WSMA_Presentation.pptx)
+- Presentation slides: [report/WSMA_Presentation.pptx](report/WSMA_Presentation.pptx) (with speaker notes),
+  PDF copy: [report/WSMA_Presentation.pdf](report/WSMA_Presentation.pdf)
 - Line-by-line code walkthrough, glossary and viva guide:
   [report/Code_Walkthrough.pdf](report/Code_Walkthrough.pdf)
 
@@ -87,7 +88,7 @@ data/        the three datasets and data/cache/ (saved spaCy/VADER output)
 scripts/     common.py (shared harness), transforms.py (input views), 00–07 (steps)
 results/     one JSON per experiment, top-coefficient lists, results_table.md
 figures/     the charts used in the report
-report/      the final report (IEEE, .pdf and .docx), WSMA_Presentation.pptx (viva slides),
+report/      the final report (IEEE, .pdf and .docx), WSMA_Presentation.pptx/.pdf (viva slides),
              Code_Walkthrough.pdf and its generator,
              the architecture diagram and its script
 ```
