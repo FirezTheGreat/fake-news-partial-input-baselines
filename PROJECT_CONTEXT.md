@@ -126,16 +126,15 @@ scripts/transforms.py    every restricted view + caching
 scripts/00–07            data check, E1, E2, E3, E4, more probes + SVM, E5, figures
 results/                 one JSON per experiment, *_tokens.json, results_table.md, before_quote_fix/
 figures/                 seven charts used in the report
-report/                  WSMA_Report.docx/.pdf (final, hand-edited), WSMA_Report_IEEE.docx/.pdf
-                         (IEEE two-column version, the one to submit), Code_Walkthrough.pdf,
-                         their generators, architecture diagram
+report/                  WSMA_Report.pdf (final report, IEEE two-column) + its editable .docx,
+                         Code_Walkthrough.pdf + build_walkthrough.py, architecture diagram + script
 ```
 
-`report/build_report.py` generated the first draft of the report; running it again **overwrites**
-the hand-edited final version. `report/build_ieee.py` converts the edited report to IEEE format
-(text unchanged; citations become [n], sections I/II, "Fig."/"TABLE I" captions); rerun it after any
-edit to the .docx, then export the PDF from Word. `report/build_walkthrough.py` rebuilds the walkthrough PDF from the
-code (safe to rerun). GitHub: FirezTheGreat/fake-news-partial-input-baselines.
+The final report is the IEEE version only (10 pages; citations [1]–[14] in order of first use,
+sections I–VIII, "Fig."/"TABLE I" captions). Edit `WSMA_Report.docx` in Word and re-export the PDF.
+The earlier single-column report and its generators were removed (still in git history).
+`report/build_walkthrough.py` rebuilds the walkthrough PDF from the code (safe to rerun).
+GitHub: FirezTheGreat/fake-news-partial-input-baselines.
 
 ## 8. Rules
 
@@ -180,8 +179,8 @@ code (safe to rerun). GitHub: FirezTheGreat/fake-news-partial-input-baselines.
     a Widely Used Fake News Corpus. arXiv:2609.25006 (preprint). doi:10.48550/arXiv.2609.25006
 14. McIntire, G. fake_or_real_news dataset. github.com/joolsa/fake_real_news_dataset
 
-## 10. Status (2026-10-15)
+## 10. Status (2026-10-27)
 
 Everything is built, verified and pushed: pipeline reproduces from a fresh GitHub clone in ~4 min
-with identical results; report finalised by Abhishek (PDF exported); walkthrough PDF current.
-**Remaining:** learning the project and rehearsing (walkthrough §9–10).
+with identical results; final report is the IEEE PDF; walkthrough PDF current.
+**Remaining:** presentation slides (if made) and rehearsing (walkthrough §9–10).

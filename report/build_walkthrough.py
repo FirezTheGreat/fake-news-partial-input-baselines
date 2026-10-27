@@ -446,7 +446,7 @@ weights (L2 regularisation, scikit-learn's default strength `C = 1`) so it doesn
 
 - **It is readable.** Each word has exactly one weight. A large positive weight means "this word
   pushes towards fake"; large negative means "towards real". That is how we found "reuters",
-  "said", "via" and "featured" (report Figure 3). A neural network would not show this so directly.
+  "said", "via" and "featured" (report Fig. 3). A neural network would not show this so directly.
 - **It is the standard baseline** for TF-IDF text classification and the kind of model behind
   the published 98–99% ISOT results.
 - **If a simple linear model already gets 98%, the task is suspiciously easy.** That is the point
@@ -778,7 +778,7 @@ regression), since only they have one weight per word.
 """),
         (157, 164, r"""
 Prints the lists with the sign shown (`+8.3f`) and saves `results/<name>_tokens.json`, which
-`07_figures.py` uses for the token chart (report Figure 3).
+`07_figures.py` uses for the token chart (report Fig. 3).
 """),
     ]))
 
@@ -1003,7 +1003,7 @@ splits), only {fp + fn} errors among 7,729 test articles ({fp} real called fake,
 **What to say:** the strongest clues are about **who published** the article, not whether it is
 true: the agency name, the dateline city, the days of the week Reuters puts in every story, its
 attribution verbs ("said", "told"); and on the fake side, image-credit lines ("featured image via"),
-"video", "read" (from "READ MORE:") and an opinionated voice ("this", "just", "us"). Report Figure 3 shows
+"video", "read" (from "READ MORE:") and an opinionated voice ("this", "just", "us"). Report Fig. 3 shows
 these with the source markers in orange.
 """))
 
@@ -1046,7 +1046,7 @@ word length (0.175), share of all-caps words (0.132), exclamation marks (0.120).
 more questions, shout more and use shorter words.
 """),
         (42, 44, f"""
-Full body without the title, needed for the degradation chart (report Figure 8): {pct('e2_body_only')}.
+Full body without the title, needed for the degradation chart (report Fig. 8): {pct('e2_body_only')}.
 """),
         (47, 48, "Entry point."),
     ]))
@@ -1232,7 +1232,7 @@ colour-blind readers.
 """),
         (30, 36, r"""
 `PROVENANCE`: words we label by hand as **publisher markers** (agency, dateline, timestamp, image
-credit, URL fragments, media tags). Figure 2 colours them orange. Deliberately strict: "said" is left
+credit, URL fragments, media tags). The token chart (report Fig. 3) colours them orange. Deliberately strict: "said" is left
 out even though it is a wire-style word, so we don't overstate.
 """),
         (38, 68, r"""
@@ -1249,32 +1249,32 @@ sharp in print, and `bbox: tight` to trim empty margins.
 skipped instead of crashing). `title` puts a bold title and a grey subtitle above a chart.
 """),
         (100, 125, r"""
-**`fig1_accuracy.png` (report Figure 2), accuracy by condition.** Horizontal bars (`barh`), one per condition, with the
+**`fig1_accuracy.png` (report Fig. 2), accuracy by condition.** Horizontal bars (`barh`), one per condition, with the
 percentage written at the end of each bar and a dashed vertical line at chance. Lists are reversed
 (`[::-1]`) so E1 appears at the top.
 """),
         (128, 150, r"""
-**`fig2_leakage_tokens.png` (report Figure 3), strongest E1 words.** Two panels (real, fake), 15 words each, bar length = size of the
+**`fig2_leakage_tokens.png` (report Fig. 3), strongest E1 words.** Two panels (real, fake), 15 words each, bar length = size of the
 weight. Words in `PROVENANCE` are orange, the rest grey, with a legend.
 """),
         (153, 181, r"""
-**`fig3_confusion.png` (report Figure 4), confusion matrices** for E1, E3 and E3b side by side, all on **one colour scale**
+**`fig3_confusion.png` (report Fig. 4), confusion matrices** for E1, E3 and E3b side by side, all on **one colour scale**
 (`vmax` = largest cell) so the shading is comparable. Each cell shows the count and the row
 percentage; text turns white on dark cells. The panel title gives accuracy and total errors.
 """),
         (184, 209, r"""
-**`fig4_degradation.png` (report Figure 8), degradation.** Accuracy as information is removed: full text → body only → function
+**`fig4_degradation.png` (report Fig. 8), degradation.** Accuracy as information is removed: full text → body only → function
 words → eight numbers, with the chance line. The point: accuracy falls slowly and stays far above
 chance.
 """),
-        (212, 240, "**`fig5_topic_matched.png` (report Figure 6), topic-matched check (E5a–E5d)** with this subset's own chance line (60.9%)."),
+        (212, 240, "**`fig5_topic_matched.png` (report Fig. 6), topic-matched check (E5a–E5d)** with this subset's own chance line (60.9%)."),
         (243, 274, r"""
-**`fig6_svm_check.png` (report Figure 7), classifier check.** A dot plot: blue = logistic regression, orange = SVM, joined by a
+**`fig6_svm_check.png` (report Fig. 7), classifier check.** A dot plot: blue = logistic regression, orange = SVM, joined by a
 grey line, for the same four inputs. The axis doesn't start at zero, so dots are used instead of bars
 (bars starting above zero would exaggerate differences).
 """),
         (277, 310, r"""
-**`fig7_cross_corpus.png` (report Figure 5), cross-corpus.** For each direction, a blue bar (tested on the same dataset) and an orange
+**`fig7_cross_corpus.png` (report Fig. 5), cross-corpus.** For each direction, a blue bar (tested on the same dataset) and an orange
 bar (tested on the other dataset), with a dashed tick at the other dataset's chance.
 """),
         (313, 326, r"""
@@ -1331,15 +1331,15 @@ Figure numbers are the report's.
    websites. So a model could be recognising the newsroom instead of the lie." Hospital analogy.
 3. **The method.** "Partial-input baselines, from Gururangan et al. 2018: I trained models that are
    *not allowed* to see the content. If they still score high, the dataset is leaking the answer."
-4. **Probes (Figure 2).** "The first sentence alone: 99.1. Only words like 'the, of, a' and
+4. **Probes (Fig. 2).** "The first sentence alone: 99.1. Only words like 'the, of, a' and
    punctuation: 96.8. Eight numbers like word count and question marks: 86.2. Chance is 54.8."
-5. **Why (Figure 3).** "The strongest clues are 'Reuters', 'Washington', days of the week,
+5. **Why (Fig. 3).** "The strongest clues are 'Reuters', 'Washington', days of the week,
    'featured image via'. Publisher markers, not truth."
-6. **Stripping (Figure 4).** "I removed every marker from both classes. Still 97.3."
-7. **Topic and classifier (Figures 6, 7).** "Same topic only, everything stripped, function words
+6. **Stripping (Fig. 4).** "I removed every marker from both classes. Still 97.3."
+7. **Topic and classifier (Figs. 6, 7).** "Same topic only, everything stripped, function words
    only: 90.3 against 60.9 chance. And a different classifier, a linear SVM, does slightly better,
    not worse."
-8. **Other datasets (Figure 5).** "Trained on ISOT, tested elsewhere: 45.5 on LIAR,
+8. **Other datasets (Fig. 5).** "Trained on ISOT, tested elsewhere: 45.5 on LIAR,
    below chance; 61.2 on a dataset of real articles from other outlets, calling two-thirds of genuine
    news fake."
 9. **Conclusion.** "The 98 percent measures the newsroom, not the truth. Fake news detectors should be
@@ -1362,11 +1362,11 @@ Figure numbers are the report's.
             ["7 SVM check", "Orange dots (SVM) are slightly right of blue: a better model exploits the shortcut more."],
             ["8 Degradation", "Remove more and more information; accuracy falls slowly and never near chance."],
         ]) + "<h3>Talk structure and transitions</h3>" + table(["Part", "Story points", "Time", "Move on with"], [
-            ["Part 1: the claim and the flaw", "1–3: hook, flaw, method (Figure 1)", "about 1 min",
+            ["Part 1: the claim and the flaw", "1–3: hook, flaw, method (Fig. 1)", "about 1 min",
              "\"So what happens when I take the content away?\""],
-            ["Part 2: the evidence", "4–6: probes, tokens, stripping (Figures 2–4, 8)", "about 1 min",
+            ["Part 2: the evidence", "4–6: probes, tokens, stripping (Figs. 2–4, 8)", "about 1 min",
              "\"But maybe it's just topic, or just my classifier, or just this dataset.\""],
-            ["Part 3: the checks and the verdict", "7–9: topic, classifier, other datasets, conclusion (Figures 5–7)",
+            ["Part 3: the checks and the verdict", "7–9: topic, classifier, other datasets, conclusion (Figs. 5–7)",
              "about 1 min", "\"Thank you, I'm happy to take questions.\""],
         ]) + md(r"""
 The transition lines are signposts: each one names the objection the next part answers, which keeps
@@ -1427,7 +1427,7 @@ control and two cross-corpus tests. State limitations without being asked.
         ("Isn't fake news detection a common, solved project?", "It looks solved because ISOT makes it look easy. I show why: the classes can be told apart by publisher style alone."),
         ("Hasn't someone already shown this?", "Partly. Zhou et al. (2021) showed fake news datasets leak source identity, and Verma (2026, a preprint) audited this same corpus by removing tags and metadata. My stripping and transfer results agree with theirs. What I add: style-only probes (function words: 96.8%), stripping both classes' markers, a topic-matched control and a full-article cross-corpus test."),
         ("What is a partial-input baseline?", "A model deliberately given only part of the input. If it still scores well, that part leaks the label. Gururangan et al. (2018) used it to expose artifacts in NLI data."),
-        ("Why logistic regression and not BERT?", "Its weights are readable: one per word, so I can see exactly what it relies on (report Figure 3). It's the standard TF-IDF baseline and matches published ISOT results. A stronger model would likely exploit the same shortcuts at least as well (the SVM already does) and would hide what it uses. Transformers are named as a limitation and as future work."),
+        ("Why logistic regression and not BERT?", "Its weights are readable: one per word, so I can see exactly what it relies on (report Fig. 3). It's the standard TF-IDF baseline and matches published ISOT results. A stronger model would likely exploit the same shortcuts at least as well (the SVM already does) and would hide what it uses. Transformers are named as a limitation and as future work."),
         ("Why a random forest for E2c/E2d/E2e?", "Those inputs are a few numbers, where useful rules are thresholds and combinations; trees capture those. It also gives feature importances."),
         ("Why stratified splitting?", "It keeps the real/fake ratio identical in train and test, so accuracy and chance aren't shifted by a lucky split, and chance is the same across experiments."),
         ("Why 80/20 and seed 42?", "80/20 is conventional and leaves 7,729 test articles (≈77 per percentage point). The seed fixes the split so every experiment uses the same test articles and anyone gets identical numbers. Any fixed number works; 42 is convention."),
