@@ -183,6 +183,6 @@ GitHub: FirezTheGreat/fake-news-partial-input-baselines.
 
 Everything is built, verified and pushed: pipeline reproduces from a fresh GitHub clone in ~4 min
 with identical results; final report is the IEEE PDF; walkthrough PDF current.
-Presentation: 11-slide deck with speaker notes, made as a Claude Slides artifact (private; download
-as PowerPoint or PDF): https://claude.ai/artifact/6ZHHUe6jMRpYH5fDNnxebk. Decided: slides, no website
+Presentation: `report/WSMA_Presentation.pptx`, 11 slides with speaker notes (also a Claude Slides artifact, private:
+https://claude.ai/artifact/6ZHHUe6jMRpYH5fDNnxebk). Decided: slides, no website
 (the GitHub repo is the public showcase). **Remaining:** rehearsing (walkthrough §9–10).
